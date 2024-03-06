@@ -1,0 +1,13 @@
+/* Переменные с цветами */
+
+:root {
+    --main-bg: #E5E5E5;
+    --secondary-bg: #14213D;
+    --third-bg: #276b33;
+
+    --main-text: #000000;
+    --secondary-text: #ffffff;
+
+    --accent-main: #FCA311;
+    --error-main: #fa021f;
+}

@@ -1,0 +1,35 @@
+@import "../../../../../ColorVar.module.css";
+
+.my_posts {
+    overflow: auto;
+    grid-area: MP;
+    padding: 0 5px 0 2px;
+
+}
+
+.my_posts__header {
+    text-align: center;
+    font-size: 25px;
+    font-weight: 700;
+    text-transform: capitalize;
+    margin-bottom: 5px;
+}
+
+.my_posts__new_post {
+    margin-bottom: 10px;
+}
+
+.formWrapper{}
+
+/* Локальные стили для button*/
+.my_posts__new_post button {
+}
+
+/* Локальные стили для input*/
+.my_posts__new_post input {
+}
+
+/* Локальные стили для textarea*/
+.my_posts__new_post textarea {
+}
+

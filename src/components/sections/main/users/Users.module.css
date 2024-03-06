@@ -1,0 +1,22 @@
+@import "../../../../ColorVar.module.css";
+
+.users_lists {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0 10px 10px;
+    overflow: auto;
+    height: calc(100% - 35px);
+}
+
+.users_lists__pagination {
+    margin: 0 auto;
+}
+
+.users_lists__dotes {
+    color: var(--main-text);
+}
+
+
+
+
+

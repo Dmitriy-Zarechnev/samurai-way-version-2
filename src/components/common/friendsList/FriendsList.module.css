@@ -1,0 +1,36 @@
+@import "../../../ColorVar.module.css";
+
+.friends_lists {
+    overflow: auto;
+    height: calc(100% - 35px);
+width: 100%;
+}
+
+.friend {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.link {
+    background: none;
+    padding-bottom: 0;
+}
+
+.img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    object-position: center center;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.name {
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: capitalize;
+}

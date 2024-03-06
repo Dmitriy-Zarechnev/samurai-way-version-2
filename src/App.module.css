@@ -1,0 +1,16 @@
+@import "./ColorVar.module.css";
+
+.app_body {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-template-rows: 70px 1fr 40px;
+    grid-template-areas:
+            'H H'
+            "N M"
+            "F F";
+
+    height: 100vh;
+    background-color: var(--main-bg);
+    max-width: 1220px;
+    margin: 0 auto;
+}

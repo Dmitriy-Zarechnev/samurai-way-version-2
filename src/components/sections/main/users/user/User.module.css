@@ -1,0 +1,58 @@
+@import "../../../../../ColorVar.module.css";
+
+.users_list {
+    border: 2px solid var(--secondary-bg);
+    border-radius: 20px;
+    background-color: var(--third-bg);
+    padding: 20px;
+}
+
+.users_list:not(:last-child) {
+    margin-bottom: 15px;
+}
+
+
+.users_up_list {
+    display: flex;
+    gap: 20px;
+}
+
+.users_up_list__img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    object-position: center center;
+    cursor: pointer;
+}
+
+.users_up_list__status {
+    flex: 1 1 auto;
+    font-size: 30px;
+}
+
+.users_down_list {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    align-items: center;
+}
+
+.users_down_list a {
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--secondary-text);
+}
+
+.users_down_list__left_fullName {
+    font-size: 40px;
+    font-weight: 700;
+
+}
+
+.users_down_list__btn {
+    font-size: 25px;
+}
+
+.unfollow_red {
+    background-color:var(--main-text);
+}

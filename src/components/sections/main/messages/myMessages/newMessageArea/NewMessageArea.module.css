@@ -1,0 +1,19 @@
+.new_message {
+    margin-bottom: 10px;
+}
+
+/* Локальные стили для textarea */
+.new_message textarea {
+    height: 80px;
+}
+
+/* Локальные стили для кнопки */
+.new_message button {
+    padding: 5px 10px;
+}
+
+/* Локальные стили для span */
+.new_message span {
+    margin-bottom: 0;
+}
+

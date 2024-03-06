@@ -1,0 +1,42 @@
+@import "../../../ColorVar.module.css";
+
+.label {
+    font-size: 20px;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor:pointer;
+}
+
+.textarea {
+    border: 1px solid var(--secondary-bg);
+    background-color: var(--secondary-text);
+    resize: none;
+    height: 100px;
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 5px;
+    font-size: 18px;
+}
+
+.errorClass {
+    border: 1px solid var(--error-main);
+}
+
+.errorClass:focus-visible {
+    outline: 2px solid var(--error-main)
+}
+
+.span {
+    color: var(--error-main);
+    font-size: 20px;
+    text-transform: capitalize;
+}
+
+.spanDisplay {
+    opacity: 0;
+}
+
+.errorDisplay {
+    opacity: 1;
+}

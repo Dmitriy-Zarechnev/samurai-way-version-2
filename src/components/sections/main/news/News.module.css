@@ -1,0 +1,14 @@
+.news {
+    background-color: red;
+
+    display: grid;
+    grid-template-columns: 1fr 100px;
+    grid-template-rows: 50px 1fr;
+    grid-template-areas:
+            'NH NH'
+            'ND NSB';
+}
+
+.news__header {
+    grid-area: NH;
+}

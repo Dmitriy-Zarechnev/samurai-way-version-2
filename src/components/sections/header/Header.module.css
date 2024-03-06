@@ -1,0 +1,44 @@
+@import "../../../ColorVar.module.css";
+
+.app_header {
+    background-color: var(--third-bg);
+    grid-area: H;
+
+    padding: 10px 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.app_header img {
+    width: 50px;
+    height: 50px;
+}
+
+.login_block {
+}
+
+.login_block a {
+    color: var(--secondary-text)
+}
+
+.button_box {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.button_box button {
+    background-color:var(--secondary-text);
+    color: var(--secondary-bg);
+    font-weight: 600;
+
+}
+
+.span {
+    font-size: 20px;
+    color: var(--secondary-text)
+}

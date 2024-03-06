@@ -1,0 +1,16 @@
+@import "../../../ColorVar.module.css";
+
+.page {
+    font-size: 18px;
+    margin-right: 5px;
+}
+
+.selected_page {
+    font-weight: 700;
+    color: var(--accent-main);
+}
+
+.page_number {
+    color: var(--main-text);
+    cursor: pointer
+}

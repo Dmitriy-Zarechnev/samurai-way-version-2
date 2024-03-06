@@ -1,0 +1,29 @@
+@import "../../../ColorVar.module.css";
+
+.navbar_Left {
+    background-color: var(--main-bg);
+    padding: 20px;
+    grid-area: N;
+}
+
+.navbar_Left__item {
+    list-style: none;
+}
+
+.navbar_Left__item:not(:last-child) {
+    margin-bottom: 5px;
+}
+
+
+.navbar_Left__item a {
+    font-size: 25px;
+    font-weight: 500;
+    color: var(--main-text);
+    text-decoration: none;
+}
+
+.navbar_Left__item a.active {
+    background-size: 100% 3px;
+    color: var(--third-bg);
+    font-weight: 700;
+}

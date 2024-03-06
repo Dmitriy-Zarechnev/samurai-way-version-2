@@ -1,0 +1,45 @@
+.friends_sidebar {
+    grid-area: FSB;
+    padding: 0 5px 0 5px;
+    overflow: auto;
+
+}
+
+.friends_sidebar__header {
+    font-size: 25px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.link {
+    background: none;
+    padding-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    object-position: center center;
+    border-radius: 50%;
+    cursor: pointer;
+
+}
+
+.name {
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: capitalize;
+    text-align: center;
+    color: var(--secondary-bg)
+}
+
+.name:hover {
+    color: var(--accent-main)
+}

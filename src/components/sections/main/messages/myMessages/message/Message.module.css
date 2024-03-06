@@ -1,0 +1,19 @@
+@import "../../../../../../ColorVar.module.css";
+
+.message_list {
+    list-style: none;
+    overflow: auto;
+    height: calc(100% - 30px - 180px);
+    margin-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.message_list__item {
+    background-color: var(--third-bg);
+    padding: 5px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    font-weight: 500;
+    color: var(--secondary-text);
+}

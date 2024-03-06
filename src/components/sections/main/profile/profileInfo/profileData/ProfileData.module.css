@@ -1,0 +1,101 @@
+@import "../../../../../../ColorVar.module.css";
+
+.profile {
+    height: 300px;
+    overflow: auto;
+    grid-area: PI;
+    padding: 10px;
+}
+
+.profile__box {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.profile__left {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1 1 auto;
+}
+
+.profile__full_name {
+    font-weight: 700;
+    font-size: 35px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.profile_work__text {
+    font-size: 20px;
+
+}
+
+.profile__right {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile__img {
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto 5px auto;
+}
+
+
+/* ----- Стили для инпут типа File ---- */
+.btn_Input {
+    background-color: var(--secondary-bg);
+    color: var(--secondary-text);
+    font-weight: 400;
+    padding: 5px 5px;
+    display: block;
+    text-align: center;
+    font-size: 14px;
+
+
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all .5s ease;
+}
+
+.btn_Input:hover {
+    background-color: var(--secondary-text);
+    color: var(--secondary-bg);
+}
+
+.btn_Input:active {
+    transform: scale(0.96);
+}
+
+.fileInput {
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    left: 0;
+}
+
+/* ---------------------------- */
+
+.fail_message {
+    color: var(--error-main);
+    font-weight: 600;
+    max-width: 200px;
+}
+
+
+.profile__contacts {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* ----- Стили для кнопки edit ---- */
+.edit_btn{
+    padding: 5px;
+    font-size: 14px;
+    margin: 0 auto 0 0;
+}

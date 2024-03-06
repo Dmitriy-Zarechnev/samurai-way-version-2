@@ -1,0 +1,13 @@
+.app_profile {
+    padding: 10px 0 10px 8px;
+    height: 100%;
+
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    grid-template-rows: 300px 1fr;
+    grid-template-areas:
+            'PI PI'
+            "MP FSB";
+}
+
+

@@ -1,0 +1,14 @@
+.music {
+    background-color: blue;
+
+    display: grid;
+    grid-template-columns: 1fr 100px;
+    grid-template-rows: 50px 1fr;
+    grid-template-areas:
+            'MH MH'
+            'MD MSB';
+}
+
+.music__header {
+    grid-area: MH;
+}

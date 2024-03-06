@@ -1,0 +1,39 @@
+@import "../../../../../../ColorVar.module.css";
+
+.wrapper {
+    grid-area: PI;
+}
+
+.info_wrapper {
+    display: flex;
+    column-gap: 30px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+
+.contacts_header {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--secondary-bg);
+    text-align: center;
+    text-decoration: underline;
+    margin-bottom: 10px;
+}
+
+/* Локальные стили для кнопки*/
+.wrapper button {
+    margin: 0 auto 0 0;
+}
+
+/* Дополнительные стили для checkbox*/
+.checkClass {
+    align-self: center;
+}
+
+.failMessage {
+    color: var(--error-main);
+    margin-top: 5px;
+    display: block;
+}

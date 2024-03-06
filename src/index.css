@@ -1,0 +1,127 @@
+@import "ColorVar.module.css";
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Nunito Sans', 'Segoe UI', sans-serif;
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: 400;
+    color: var(--main-text);
+
+    @media (prefers-reduced-motion: reduce) {
+        animation: none;
+    }
+}
+
+/*Стили для автокомплита в инпуте*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--secondary-text) inset !important;
+    /* color: ${theme.colors.accent};*/
+}
+
+
+/* Стили при выделении текста */
+*::selection {
+    color: var(--main-bg);
+    background-color: var(--accent-main);
+}
+
+/* Рамка при фокусе */
+*:focus-visible {
+    outline: 2px solid var(--accent-main);
+}
+
+/* Стили для скролла FireFox */
+/** {*/
+/*    scrollbar-width: thin;*/
+/*    scrollbar-color: var(--secondary-bg) var(--main-bg);*/
+/*}*/
+
+/* Стили для скролла Chrome */
+
+*::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+*::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track:horizontal {
+    background-color: var(--main-bg);
+}
+
+
+*::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb:horizontal {
+    background-color: var(--secondary-bg);
+    border: 3px solid var(--main-bg);
+    border-radius: 5px;
+}
+
+
+*::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:horizontal:hover {
+    background-color: var(--accent-main);
+}
+
+*::-webkit-scrollbar-corner{
+    background-color: var(--main-bg);
+}
+
+
+body {
+    background-color: var(--main-bg);
+    overflow: hidden;
+}
+
+/* Анимация всех эффектов кнопки */
+button {
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+/* Стили для hover эффекта кнопки */
+button:not(:disabled):hover {
+    box-shadow: 0 0 0 1px var(--main-bg), 0 0 3px 3px var(--accent-main);
+    color: var(--accent-main);
+}
+
+
+/* Стили при клике на кнопки */
+button:not(:disabled):active {
+    transform: scale(0.96);
+}
+
+
+/* Стили disabled кнопки */
+button:disabled {
+    background-color: var(--third-bg);
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+/* Стили для ссылок */
+a {
+    text-decoration: none;
+    padding-bottom: 5px;
+    background: linear-gradient(var(--accent-main), var(--accent-main)) 0 75% / 0 2px no-repeat;
+    transition: .5s;
+    background-size: 0 3px;
+}
+
+/* Стили для hover эффекта ссылок */
+a:hover {
+    background-size: 100% 3px;
+    cursor: pointer;
+}
+
+
+
+

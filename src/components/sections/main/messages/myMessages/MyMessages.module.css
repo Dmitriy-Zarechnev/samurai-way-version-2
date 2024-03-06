@@ -1,0 +1,12 @@
+.my_messages {
+    flex: 1 1 auto;
+    padding: 0 10px;
+}
+
+.my_messages__header {
+    font-size: 25px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    text-align: center;
+}
+

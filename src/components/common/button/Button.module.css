@@ -1,0 +1,14 @@
+@import "../../../ColorVar.module.css";
+
+.button {
+    display: block;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--main-bg);
+    text-transform: capitalize;
+
+    background-color: var(--secondary-bg);
+    padding: 10px 20px;
+    margin: 0 0 0 auto;
+}
+

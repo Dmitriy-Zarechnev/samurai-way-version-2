@@ -1,0 +1,14 @@
+.settings {
+    background-color: yellow;
+
+    display: grid;
+    grid-template-columns: 1fr 100px;
+    grid-template-rows: 50px 1fr;
+    grid-template-areas:
+            'SH SH'
+            'SD SSB';
+}
+
+.settings__header {
+    grid-area: SH;
+}

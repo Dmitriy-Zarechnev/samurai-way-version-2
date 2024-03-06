@@ -1,0 +1,13 @@
+.checkBox {
+    margin-bottom: 5px;
+}
+
+.inputCheck {
+    margin-right: 5px;
+}
+
+.labelCheck {
+    font-size: 18px;
+    text-transform: capitalize;
+    font-weight: 600;
+}
