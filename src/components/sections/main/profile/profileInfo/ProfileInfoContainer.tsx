@@ -24,9 +24,26 @@ type ProfileInfoAPIComponentMapDispatchToProps = {
 
 class ProfileInfoAPIComponent extends React.PureComponent<ProfileInfoAPIComponentPropsType> {
 
+    //  -------- Отправка после редактирования Profile ----------------
+    onSubmitProfileDataForm = (data: ProfileInfoType) => {
+        this.props.saveProfile(data)
+    }
+
+
     //  -------- Загрузка страницы пользователя ----------------
     componentDidMount() {
-        // this.refreshProfile()
+        this.loadUserData()
+    }
+
+    //  -------- Обновление страницы пользователя ----------------
+    componentDidUpdate(prevProps: Readonly<ProfileInfoAPIComponentPropsType>, prevState: Readonly<{}>) {
+        if (this.props.match.params.userId !== prevProps.match.params.userId) {
+            this.loadUserData()
+        }
+    }
+
+    // Общий метод для методов жизненного цикла
+    loadUserData() {
         let userId = Number(this.props.match.params.userId)
         if (!userId) {
             userId = 30743
@@ -34,11 +51,6 @@ class ProfileInfoAPIComponent extends React.PureComponent<ProfileInfoAPIComponen
 
         this.props.goToPage(userId)
         this.props.getStatus(userId)
-    }
-
-    // //  -------- Отправка после редактирования Profile ----------------
-    onSubmitProfileDataForm = (data: ProfileInfoType) => {
-        this.props.saveProfile(data)
     }
 
     render() {
