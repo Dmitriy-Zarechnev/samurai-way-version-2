@@ -24,6 +24,7 @@ type ProfileInfoAPIComponentMapDispatchToProps = {
 
 class ProfileInfoAPIComponent extends React.PureComponent<ProfileInfoAPIComponentPropsType> {
 
+
     //  -------- Отправка после редактирования Profile ----------------
     onSubmitProfileDataForm = (data: ProfileInfoType) => {
         this.props.saveProfile(data)
