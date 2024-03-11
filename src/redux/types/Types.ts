@@ -14,5 +14,6 @@ export type CommonActionsTypeForApp =
     UsersAPIComponentActionsType |
     AppReducerActionsType
 
+// Типизация для thunk, позволяет диспатчить thunk
 export type ThunkType = ThunkAction<void, AppRootState, unknown, CommonActionsTypeForApp>
 export type ThunkDispatchType = ThunkDispatch<AppRootState, unknown, CommonActionsTypeForApp>
