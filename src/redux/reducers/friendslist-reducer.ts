@@ -15,7 +15,7 @@ const initialState: Array<UsersListType> = []
 
 
 // *********** Reducer - редьюсер, чистая функция для изменения стэйта после получения экшена от диспача ****************
-export const friendslistReducer = (state: Array<UsersListType> = initialState): Array<UsersListType> => {
+export const friendslistReducer = (state = initialState): Array<UsersListType> => {
 
     return state
 }

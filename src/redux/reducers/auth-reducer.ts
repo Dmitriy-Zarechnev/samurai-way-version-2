@@ -4,15 +4,11 @@ import {ThunkDispatchType, ThunkType} from '../redux-store'
 
 // Типизация
 export type AuthReducerActionsType =
-    SetAuthUserDataActionType |
-    LogInServerActionType |
-    ServerErrorActionType |
-    GetCaptchaUrlSuccessActionType
+    ReturnType<typeof setAuthUserData> |
+    ReturnType<typeof logInServer> |
+    ReturnType<typeof serverError> |
+    ReturnType<typeof getCaptchaUrlSuccess>
 
-type SetAuthUserDataActionType = ReturnType<typeof setAuthUserData>
-type LogInServerActionType = ReturnType<typeof logInServer>
-type ServerErrorActionType = ReturnType<typeof serverError>
-type GetCaptchaUrlSuccessActionType = ReturnType<typeof getCaptchaUrlSuccess>
 
 export type AuthPageInitialState = {
     id: number | null
@@ -57,7 +53,7 @@ const initialState: AuthPageInitialState = {
 
 
 // *********** Reducer - редьюсер, чистая функция для изменения стэйта после получения экшена от диспача ****************
-export const authReducer = (state: AuthPageInitialState = initialState, action: AuthReducerActionsType): AuthPageInitialState => {
+export const authReducer = (state = initialState, action: AuthReducerActionsType): AuthPageInitialState => {
     switch (action.type) {
         case SET_AUTH_USER_DATA:
             return {
@@ -128,7 +124,7 @@ export const authMe = (): ThunkType => async (dispatch: ThunkDispatchType) => {
 //  -------- Логинизация на сервере ----------------
 export const serverLogIn = (email: string, password: string, rememberMe: boolean, captcha: string): ThunkType =>
     async (dispatch: ThunkDispatchType) => {
-        const response = await authAPI.logIn(email, password, rememberMe,captcha)
+        const response = await authAPI.logIn(email, password, rememberMe, captcha)
         if (response.data.resultCode === 0) {
 
             // Успешная авторизация на сайте

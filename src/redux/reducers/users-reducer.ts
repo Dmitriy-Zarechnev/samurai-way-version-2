@@ -1,6 +1,6 @@
 import {followUnfollowAPI, usersAPI} from '../../api/api'
-import {Dispatch} from 'redux'
 import {updateObjectInArray} from '../../utils/object-helpers'
+import {ThunkDispatchType, ThunkType} from '../redux-store'
 
 
 // Типизация
@@ -29,22 +29,13 @@ type UsersPhotos = {
 
 
 export type UsersAPIComponentActionsType =
-    FollowFriendActionType |
-    UnfollowFriendActionType |
-    SetUsersActionType |
-    SetCurrentPageActionType |
-    SetTotalUsersCountActionType |
-    ToggleIsFetchingActionType |
-    ToggleIsFollowingInProgressActionType
-
-
-type FollowFriendActionType = ReturnType<typeof followFriend>
-type UnfollowFriendActionType = ReturnType<typeof unfollowFriend>
-type SetUsersActionType = ReturnType<typeof setUsers>
-type SetCurrentPageActionType = ReturnType<typeof setCurrentPage>
-type SetTotalUsersCountActionType = ReturnType<typeof setTotalUsersCount>
-type ToggleIsFetchingActionType = ReturnType<typeof toggleIsFetching>
-type ToggleIsFollowingInProgressActionType = ReturnType<typeof toggleFollowingInProgress>
+    ReturnType<typeof followFriend> |
+    ReturnType<typeof unfollowFriend> |
+    ReturnType<typeof setUsers> |
+    ReturnType<typeof setCurrentPage> |
+    ReturnType<typeof setTotalUsersCount> |
+    ReturnType<typeof toggleIsFetching> |
+    ReturnType<typeof toggleFollowingInProgress>
 
 
 // *********** Константы названий экшенов ****************
@@ -70,7 +61,7 @@ const initialState: UsersInitialState = {
 
 
 // *********** Reducer - редьюсер, чистая функция для изменения стэйта после получения экшена от диспача ****************
-export const usersReducer = (state: UsersInitialState = initialState, action: UsersAPIComponentActionsType): UsersInitialState => {
+export const usersReducer = (state = initialState, action: UsersAPIComponentActionsType): UsersInitialState => {
 
     switch (action.type) {
         case FOLLOW_FRIEND:
@@ -140,58 +131,81 @@ export const toggleFollowingInProgress = (isFetching: boolean, userId: number) =
 
 // *********** Thunk - санки необходимые для общения с DAL ****************
 //  -------- Первая загрузка списка пользователей ----------------
-export const getUsers = (currentPage: number, pageSize: number) => {
-    return async (dispatch: Dispatch<UsersAPIComponentActionsType>) => {
+export const getUsers = (currentPage: number, pageSize: number): ThunkType => {
+    return async (dispatch: ThunkDispatchType) => {
+        // Показали крутилку во время ожидания
         dispatch(toggleIsFetching(true))
 
+        // Ответ от сервера со списком пользователей
         const response = await usersAPI.getUsers(currentPage, pageSize)
 
+        // Убрали крутилку после ответа
         dispatch(toggleIsFetching(false))
+
+        // Обновили список пользователей на странице
         dispatch(setUsers(response.data.items))
+
+        // Обновили послный список пользователей
         dispatch(setTotalUsersCount(response.data.totalCount))
     }
 }
+
 //  -------- Изменение текущей страницы ----------------
-export const newPageGetUsers = (currentPage: number, pageSize: number) => {
-    return async (dispatch: Dispatch<UsersAPIComponentActionsType>) => {
+export const newPageGetUsers = (currentPage: number, pageSize: number): ThunkType => {
+    return async (dispatch: ThunkDispatchType) => {
+
+        // Выбрали другую текущую страницу
         dispatch(setCurrentPage(currentPage))
+
+        // Показали крутилку во время ожидания
         dispatch(toggleIsFetching(true))
 
+        // Ответ от сервера со списком пользователей
         const response = await usersAPI.getUsers(currentPage, pageSize)
 
+        // Убрали крутилку после ответа
         dispatch(toggleIsFetching(false))
+
+        // Обновили список пользователей на странице
         dispatch(setUsers(response.data.items))
     }
 }
 
 
 //  -------- Вспомогательная функция для дружбы ----------------
-const followUnfollow = async (dispatch: Dispatch<UsersAPIComponentActionsType>,
+const followUnfollow = async (dispatch: ThunkDispatchType,
                               id: number,
                               apiMethod: (id: number) => Promise<any>,
                               actionCreator: (id: number) => UsersAPIComponentActionsType) => {
-
+    // Используется, чтобы кнопка была disable во время ожидания ответа
     dispatch(toggleFollowingInProgress(true, id))
+
+    // Ответ с сервера
     const response = await apiMethod(id)
     response.data.resultCode === 0 && dispatch(actionCreator(id))
 
+    // Разблокируем кнопку после ответа
     dispatch(toggleFollowingInProgress(false, id))
 }
 
 //  -------- Отписка от дружбы ----------------
-export const unFollow = (id: number) => {
-    return async (dispatch: Dispatch<UsersAPIComponentActionsType>) => {
+export const unFollow = (id: number): ThunkType => {
+    return async (dispatch: ThunkDispatchType) => {
+        // Отправили запрос на сервер
         let apiMethod = followUnfollowAPI.unfollowUser.bind(followUnfollowAPI)
 
+        // Получили ответ и изменили state
         await followUnfollow(dispatch, id, apiMethod, unfollowFriend)
     }
 }
 
 //  -------- Подписка для дружбы ----------------
-export const follow = (id: number) => {
-    return async (dispatch: Dispatch<UsersAPIComponentActionsType>) => {
+export const follow = (id: number): ThunkType => {
+    return async (dispatch: ThunkDispatchType) => {
+        // Отправили запрос на сервер
         let apiMethod = followUnfollowAPI.followUser.bind(followUnfollowAPI)
 
+        // Получили ответ и изменили state
         await followUnfollow(dispatch, id, apiMethod, followFriend)
     }
 }

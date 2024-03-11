@@ -6,9 +6,7 @@ export type AppReducerActionsType =
     ReturnType<typeof initializedSuccess>
 
 
-export type AppInitialState = {
-    initialized: boolean
-}
+export type AppInitialState = typeof initialState
 
 
 // *********** Константы названий экшенов ****************
@@ -16,7 +14,7 @@ const INITIALIZED_SUCCESS = '/app/INITIALIZED-SUCCESS'
 
 
 // *********** Первоначальный стэйт для authReducer ****************
-const initialState: AppInitialState = {
+const initialState = {
     initialized: false
 }
 

@@ -1,7 +1,6 @@
 import img2 from '../../assets/images/NewPostDefault.jpg'
 import img1 from '../../assets/images/PostDefault.jpg'
 import {profileAPI} from '../../api/api'
-import {Dispatch} from 'redux'
 import {ThunkDispatchType, ThunkType} from '../redux-store'
 
 // Типизация
@@ -47,21 +46,14 @@ export type PostsDataType = {
 }
 
 export type MyPostsActionsType =
-    AddPostActionType |
-    SetUserProfileActionType |
-    getUserStatusActionType |
-    UpdateUserStatusActionType |
-    DeletePostActionType |
-    UpdateYourPhotoActionType |
-    FailUpdateActionType
+    ReturnType<typeof addPost> |
+    ReturnType<typeof setUserProfile> |
+    ReturnType<typeof getUserStatus> |
+    ReturnType<typeof updateUserStatus> |
+    ReturnType<typeof deletePost> |
+    ReturnType<typeof updateYourPhoto> |
+    ReturnType<typeof failUpdate>
 
-type AddPostActionType = ReturnType<typeof addPost>
-type SetUserProfileActionType = ReturnType<typeof setUserProfile>
-type getUserStatusActionType = ReturnType<typeof getUserStatus>
-type UpdateUserStatusActionType = ReturnType<typeof updateUserStatus>
-type DeletePostActionType = ReturnType<typeof deletePost>
-type UpdateYourPhotoActionType = ReturnType<typeof updateYourPhoto>
-type FailUpdateActionType = ReturnType<typeof failUpdate>
 
 // *********** Константы названий экшенов ****************
 export const ADD_POST = '/profile/ADD-POST'
@@ -113,7 +105,7 @@ const initialState: ProfilePagePropsType = {
 
 
 // *********** Reducer - редьюсер, чистая функция для изменения стэйта после получения экшена от диспача ****************
-export const profileReducer = (state: ProfilePagePropsType = initialState, action: MyPostsActionsType): ProfilePagePropsType => {
+export const profileReducer = (state = initialState, action: MyPostsActionsType): ProfilePagePropsType => {
 
     switch (action.type) {
 
@@ -166,7 +158,6 @@ export const profileReducer = (state: ProfilePagePropsType = initialState, actio
                 failMessage: action.payload.failMessage
             }
 
-
         default:
             return state
     }
@@ -199,7 +190,7 @@ export const failUpdate = (failMessage: string) => {
 
 // *********** Thunk - санки необходимые для общения с DAL ****************
 //  -------- Загрузка страницы пользователя ----------------
-export const goToPage = (id: number) => async (dispatch: Dispatch<MyPostsActionsType>) => {
+export const goToPage = (id: number): ThunkType => async (dispatch: ThunkDispatchType) => {
     // Получили данные profile с сервера при пустом url
     const response = await profileAPI.userProfile(id)
 
@@ -213,7 +204,7 @@ export const goToPage = (id: number) => async (dispatch: Dispatch<MyPostsActions
 
 
 //  -------- Получение статуса пользователя ----------------
-export const getStatus = (id: number) => async (dispatch: Dispatch<MyPostsActionsType>) => {
+export const getStatus = (id: number): ThunkType => async (dispatch: ThunkDispatchType) => {
 
     const response = await profileAPI.getStatus(id)
 
@@ -224,7 +215,7 @@ export const getStatus = (id: number) => async (dispatch: Dispatch<MyPostsAction
 
 
 //  -------- Изменение статуса пользователя ----------------
-export const updateStatus = (status: string) => async (dispatch: Dispatch<MyPostsActionsType>) => {
+export const updateStatus = (status: string): ThunkType => async (dispatch: ThunkDispatchType) => {
 
     try {
         const response = await profileAPI.updateStatus(status)
@@ -239,7 +230,7 @@ export const updateStatus = (status: string) => async (dispatch: Dispatch<MyPost
 
 
 //  -------- Загрузка фото пользователя ----------------
-export const savePhoto = (file: File) => async (dispatch: Dispatch<MyPostsActionsType>) => {
+export const savePhoto = (file: File): ThunkType => async (dispatch: ThunkDispatchType) => {
 
     const response = await profileAPI.savePhoto(file)
 
