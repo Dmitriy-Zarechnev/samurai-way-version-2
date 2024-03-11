@@ -1,7 +1,8 @@
 import img2 from '../../assets/images/NewPostDefault.jpg'
 import img1 from '../../assets/images/PostDefault.jpg'
 import {profileAPI} from '../../api/api'
-import {ThunkDispatchType, ThunkType} from '../redux-store'
+import {ThunkDispatchType, ThunkType} from '../types/Types'
+
 
 // Типизация
 export type ProfilePagePropsType = {
@@ -56,13 +57,13 @@ export type MyPostsActionsType =
 
 
 // *********** Константы названий экшенов ****************
-export const ADD_POST = '/profile/ADD-POST'
-export const SET_USER_PROFILE = '/profile/SET-USER-PROFILE'
-export const GET_USER_STATUS = '/profile/GET-USER-STATUS'
-export const UPDATE_USER_STATUS = '/profile/UPDATE-USER-STATUS'
-export const DELETE_POST = '/profile/DELETE-POST'
-export const UPDATE_YOUR_PHOTO = '/profile/UPDATE-YOUR-PHOTO'
-export const FAIL_UPDATE = '/profile/FAIL-UPDATE'
+const ADD_POST = '/profile/ADD-POST'
+const SET_USER_PROFILE = '/profile/SET-USER-PROFILE'
+const GET_USER_STATUS = '/profile/GET-USER-STATUS'
+const UPDATE_USER_STATUS = '/profile/UPDATE-USER-STATUS'
+const DELETE_POST = '/profile/DELETE-POST'
+const UPDATE_YOUR_PHOTO = '/profile/UPDATE-YOUR-PHOTO'
+const FAIL_UPDATE = '/profile/FAIL-UPDATE'
 
 
 // *********** Первоначальный стэйт для profileReducer ****************

@@ -1,4 +1,4 @@
-import {MessagesPagePropsType, messagesReducer, sendNewMessage} from '../redux/reducers/messages-reducer'
+import {MessagesPagePropsType, messagesReducer, sendNewMessage} from '../reducers/messages-reducer'
 
 let startState: MessagesPagePropsType
 

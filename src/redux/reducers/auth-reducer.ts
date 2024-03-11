@@ -1,5 +1,5 @@
 import {authAPI, securityAPI} from '../../api/api'
-import {ThunkDispatchType, ThunkType} from '../redux-store'
+import {ThunkDispatchType, ThunkType} from '../types/Types'
 
 
 // Типизация

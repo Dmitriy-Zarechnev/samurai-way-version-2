@@ -1,11 +1,11 @@
 import {applyMiddleware, combineReducers, createStore} from 'redux'
-import {MyPostsActionsType, profileReducer} from './reducers/profile-reducer'
-import {messagesReducer, MyMessagesActionsType} from './reducers/messages-reducer'
+import {profileReducer} from './reducers/profile-reducer'
+import {messagesReducer} from './reducers/messages-reducer'
 import {friendslistReducer} from './reducers/friendslist-reducer'
-import {UsersAPIComponentActionsType, usersReducer} from './reducers/users-reducer'
-import {authReducer, AuthReducerActionsType} from './reducers/auth-reducer'
-import thunkMiddleware, {ThunkAction, ThunkDispatch} from 'redux-thunk'
-import {appReducer, AppReducerActionsType} from './reducers/app-reducer'
+import {usersReducer} from './reducers/users-reducer'
+import {authReducer} from './reducers/auth-reducer'
+import thunkMiddleware from 'redux-thunk'
+import {appReducer} from './reducers/app-reducer'
 
 
 const rootReducer = combineReducers({
@@ -14,22 +14,12 @@ const rootReducer = combineReducers({
     friendsListData: friendslistReducer,
     usersPage: usersReducer,
     auth: authReducer,
-    app:appReducer
+    app: appReducer
 })
 
 // Типизация всего STATE
 export type AppRootState = ReturnType<typeof rootReducer>
 
-// Типизация всех actioncreators для типизации thunk
-export type CommonActionsTypeForApp =
-    AuthReducerActionsType |
-    MyMessagesActionsType |
-    MyPostsActionsType |
-    UsersAPIComponentActionsType |
-    AppReducerActionsType
-
-export type ThunkType = ThunkAction<void, AppRootState, unknown, CommonActionsTypeForApp>
-export type ThunkDispatchType = ThunkDispatch<AppRootState, unknown, CommonActionsTypeForApp>
 
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
 

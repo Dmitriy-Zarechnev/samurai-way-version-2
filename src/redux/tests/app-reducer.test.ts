@@ -1,4 +1,4 @@
-import {AppInitialState, appReducer, initializedSuccess} from '../redux/reducers/app-reducer'
+import {AppInitialState, appReducer, initializedSuccess} from '../reducers/app-reducer'
 
 test('app reducer should return initialized === true', () => {
 

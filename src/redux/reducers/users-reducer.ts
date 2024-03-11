@@ -1,6 +1,6 @@
 import {followUnfollowAPI, usersAPI} from '../../api/api'
 import {updateObjectInArray} from '../../utils/object-helpers'
-import {ThunkDispatchType, ThunkType} from '../redux-store'
+import {ThunkDispatchType, ThunkType} from '../types/Types'
 
 
 // Типизация
@@ -39,13 +39,13 @@ export type UsersAPIComponentActionsType =
 
 
 // *********** Константы названий экшенов ****************
-export const FOLLOW_FRIEND = '/users/FOLLOW-FRIEND'
-export const UNFOLLOW_FRIEND = '/users/UNFOLLOW-FRIEND'
-export const SET_USERS = '/users/SET-USERS'
-export const SET_CURRENT_PAGE = '/users/SET-CURRENT-PAGE'
-export const SET_TOTAL_USERS_COUNT = '/users/SET-TOTAL-USERS-COUNT'
-export const TOGGLE_IS_FETCHING = '/users/TOGGLE-IS-FETCHING'
-export const TOGGLE_IS_FOLLOWING_IN_PROGRESS = '/users/TOGGLE-IS-FOLLOWING-IN-PROGRESS'
+const FOLLOW_FRIEND = '/users/FOLLOW-FRIEND'
+const UNFOLLOW_FRIEND = '/users/UNFOLLOW-FRIEND'
+const SET_USERS = '/users/SET-USERS'
+const SET_CURRENT_PAGE = '/users/SET-CURRENT-PAGE'
+const SET_TOTAL_USERS_COUNT = '/users/SET-TOTAL-USERS-COUNT'
+const TOGGLE_IS_FETCHING = '/users/TOGGLE-IS-FETCHING'
+const TOGGLE_IS_FOLLOWING_IN_PROGRESS = '/users/TOGGLE-IS-FOLLOWING-IN-PROGRESS'
 
 
 // *********** Первоначальный стэйт для usersReducer ****************

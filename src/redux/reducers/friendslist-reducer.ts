@@ -10,7 +10,6 @@ export type FriendsListDataType = {
 }
 
 // *********** Первоначальный стэйт для friendslistReducer ****************
-
 const initialState: Array<UsersListType> = []
 
 

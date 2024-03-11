@@ -1,4 +1,4 @@
-import {followFriend, setCurrentPage, setTotalUsersCount, setUsers, toggleFollowingInProgress, toggleIsFetching, unfollowFriend, UsersInitialState, usersReducer} from '../redux/reducers/users-reducer'
+import {followFriend, setCurrentPage, setTotalUsersCount, setUsers, toggleFollowingInProgress, toggleIsFetching, unfollowFriend, UsersInitialState, usersReducer} from '../reducers/users-reducer'
 
 
 let startState: UsersInitialState

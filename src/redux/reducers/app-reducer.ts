@@ -1,5 +1,5 @@
-import {ThunkDispatchType, ThunkType} from '../redux-store'
 import {authMe} from './auth-reducer'
+import {ThunkDispatchType, ThunkType} from '../types/Types'
 
 // Типизация
 export type AppReducerActionsType =

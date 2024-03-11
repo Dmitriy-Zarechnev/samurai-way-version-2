@@ -1,5 +1,5 @@
-import {friendslistReducer} from '../redux/reducers/friendslist-reducer'
-import {UsersListType} from '../redux/reducers/users-reducer'
+import {friendslistReducer} from '../reducers/friendslist-reducer'
+import {UsersListType} from '../reducers/users-reducer'
 
 
 test('friendList reducer should return Data', () => {

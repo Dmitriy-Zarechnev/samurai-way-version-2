@@ -1,4 +1,4 @@
-import {AuthPageInitialState, authReducer, getCaptchaUrlSuccess, logInServer, serverError, setAuthUserData} from '../redux/reducers/auth-reducer'
+import {AuthPageInitialState, authReducer, getCaptchaUrlSuccess, logInServer, serverError, setAuthUserData} from '../reducers/auth-reducer'
 
 let startState: AuthPageInitialState
 

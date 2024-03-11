@@ -1,6 +1,6 @@
-import {addPost, deletePost, failUpdate, getUserStatus, PhotosType, ProfilePagePropsType, profileReducer, setUserProfile, updateUserStatus, updateYourPhoto} from '../redux/reducers/profile-reducer'
-import img1 from '../assets/images/PostDefault.jpg'
-import testImg from '../assets/images/testImg.jpg'
+import {addPost, deletePost, failUpdate, getUserStatus, PhotosType, ProfilePagePropsType, profileReducer, setUserProfile, updateUserStatus, updateYourPhoto} from '../reducers/profile-reducer'
+import img1 from '../../assets/images/PostDefault.jpg'
+import testImg from '../../assets/images/testImg.jpg'
 
 let startState: ProfilePagePropsType
 
