@@ -62,7 +62,6 @@ const mapStateToProps = (state: AppRootState) => {
     }
 }
 
-
 export const AppConnect =
     connect(mapStateToProps, {initializeApp})(App)
 
