@@ -3,14 +3,11 @@ import {authMe} from './auth-reducer'
 
 // Типизация
 export type AppReducerActionsType =
-    InitializedSuccessActionType
-
-type InitializedSuccessActionType = ReturnType<typeof initializedSuccess>
+    ReturnType<typeof initializedSuccess>
 
 
 export type AppInitialState = {
     initialized: boolean
-
 }
 
 
@@ -25,7 +22,7 @@ const initialState: AppInitialState = {
 
 
 // *********** Reducer - редьюсер, чистая функция для изменения стэйта после получения экшена от диспача ****************
-export const appReducer = (state: AppInitialState = initialState, action: AppReducerActionsType): AppInitialState => {
+export const appReducer = (state = initialState, action: AppReducerActionsType): AppInitialState => {
     switch (action.type) {
         case INITIALIZED_SUCCESS:
             return {
@@ -47,8 +44,12 @@ export const initializedSuccess = () => {
 
 // *********** Thunk - санки необходимые для общения с DAL ****************
 //  -------- Инициализация на сайте ----------------
+export const initializeApp = (): ThunkType => (dispatch: ThunkDispatchType) => {
+    // Диспатчим thunk, которая совершит инициализацию
+    const promise = dispatch(authMe())
 
-export const initializeApp = (): ThunkType => async (dispatch: ThunkDispatchType) => {
-    await dispatch(authMe())
-    dispatch(initializedSuccess())
+    // После завершения инициализации, меняем значение в state
+    Promise.all([promise]).then(() => {
+        dispatch(initializedSuccess())
+    })
 }
