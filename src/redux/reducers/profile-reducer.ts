@@ -1,7 +1,7 @@
 import img2 from '../../assets/images/NewPostDefault.jpg'
 import img1 from '../../assets/images/PostDefault.jpg'
 import {profileAPI} from '../../api/api'
-import {ThunkDispatchType, ThunkType} from '../types/Types'
+import {ResultCodesEnum, ThunkDispatchType, ThunkType} from '../types/Types'
 
 
 // Типизация
@@ -192,11 +192,12 @@ export const failUpdate = (failMessage: string) => {
 // *********** Thunk - санки необходимые для общения с DAL ****************
 //  -------- Загрузка страницы пользователя ----------------
 export const goToPage = (id: number): ThunkType => async (dispatch: ThunkDispatchType) => {
-    // Получили данные profile с сервера при пустом url
-    const response = await profileAPI.userProfile(id)
+    // Запросили данные profile с сервера при пустом url
+    const useProfileData = await profileAPI.userProfile(id)
+
 
     // Получили данные profile с сервера
-    dispatch(setUserProfile(response.data))
+    dispatch(setUserProfile(useProfileData))
 
     /* Сообщение с ошибкой загрузки аватара занули,
      при загрузке нового пользователя */
@@ -206,12 +207,11 @@ export const goToPage = (id: number): ThunkType => async (dispatch: ThunkDispatc
 
 //  -------- Получение статуса пользователя ----------------
 export const getStatus = (id: number): ThunkType => async (dispatch: ThunkDispatchType) => {
-
-    const response = await profileAPI.getStatus(id)
+    // Запросили данные status с сервера
+    const getStatusData = await profileAPI.getStatus(id)
 
     // Получили status с сервера
-    dispatch(getUserStatus(response.data))
-
+    dispatch(getUserStatus(getStatusData))
 }
 
 
@@ -219,10 +219,12 @@ export const getStatus = (id: number): ThunkType => async (dispatch: ThunkDispat
 export const updateStatus = (status: string): ThunkType => async (dispatch: ThunkDispatchType) => {
 
     try {
+        // Отправили status на сервер и ждем ответ
         const response = await profileAPI.updateStatus(status)
 
         // Заменили status после ответа с сервера
-        response.data.resultCode === 0 && dispatch(updateUserStatus(status))
+        response.data.resultCode === ResultCodesEnum.Success &&
+        dispatch(updateUserStatus(status))
 
     } catch (error) {
         // Диспатчить ошибки можно
@@ -232,14 +234,16 @@ export const updateStatus = (status: string): ThunkType => async (dispatch: Thun
 
 //  -------- Загрузка фото пользователя ----------------
 export const savePhoto = (file: File): ThunkType => async (dispatch: ThunkDispatchType) => {
-
-    const response = await profileAPI.savePhoto(file)
+    // Отправили photo на сервер и ждем
+    const savePhotoData = await profileAPI.savePhoto(file)
 
     // Заменили фото profile после ответа от сервера
-    response.data.resultCode === 0 && dispatch(updateYourPhoto(response.data.data.photos))
+    savePhotoData.resultCode === ResultCodesEnum.Success &&
+    dispatch(updateYourPhoto(savePhotoData.data.photos))
 
     // Вывели сообщение об ошибке с сервера
-    response.data.resultCode === 1 && dispatch(failUpdate(response.data.messages[0]))
+    savePhotoData.resultCode === ResultCodesEnum.Error &&
+    dispatch(failUpdate(savePhotoData.messages[0]))
 }
 
 
@@ -249,12 +253,15 @@ export const saveProfile = (data: ProfileInfoType): ThunkType => async (dispatch
     const userId = getState().auth.id
 
     if (userId !== null) {
-        const response = await profileAPI.saveProfile(data)
+        // Отправили запрос на сохранение новой информации
+        const saveProfileData = await profileAPI.saveProfile(data)
 
         // Получили новые данные profile с сервера
-        response.data.resultCode === 0 && dispatch(goToPage(userId))
+        saveProfileData.resultCode === ResultCodesEnum.Success &&
+        dispatch(goToPage(userId))
 
         // Вывели сообщение об ошибке с сервера
-        response.data.resultCode === 1 && dispatch(failUpdate(response.data.messages[0]))
+        saveProfileData.resultCode === ResultCodesEnum.Error &&
+        dispatch(failUpdate(saveProfileData.messages[0]))
     }
 }

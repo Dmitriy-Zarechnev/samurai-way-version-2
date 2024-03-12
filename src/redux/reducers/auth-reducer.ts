@@ -1,5 +1,5 @@
-import {authAPI, ResultCodesEnum, ResultCodesForCaptcha, securityAPI} from '../../api/api'
-import {ThunkDispatchType, ThunkType} from '../types/Types'
+import {authAPI,  securityAPI} from '../../api/api'
+import {ResultCodesEnum, ResultCodesForCaptcha, ThunkDispatchType, ThunkType} from '../types/Types'
 
 
 // Типизация

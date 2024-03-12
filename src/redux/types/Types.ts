@@ -17,3 +17,17 @@ export type CommonActionsTypeForApp =
 // Типизация для thunk, позволяет диспатчить thunk
 export type ThunkType = ThunkAction<void, AppRootState, unknown, CommonActionsTypeForApp>
 export type ThunkDispatchType = ThunkDispatch<AppRootState, unknown, CommonActionsTypeForApp>
+
+
+/* Типизировали resultCode используя enum
+    позволяет сравнивать не просто с числами,
+        а с ключами объекта */
+export enum ResultCodesEnum {
+    Success = 0,
+    Error = 1
+}
+
+// Расширили для captcha
+export enum ResultCodesForCaptcha {
+    CaptchaIsRequired = 10
+}

@@ -1,33 +1,31 @@
 import axios from 'axios'
-import {ProfileInfoType} from '../redux/reducers/profile-reducer'
+import {PhotosType, ProfileInfoType} from '../redux/reducers/profile-reducer'
+import {ResultCodesEnum, ResultCodesForCaptcha} from '../redux/types/Types'
 
-// Типизация data которая придет в response
-
-//
-type MeResponseType = {
-    data: {
-        id: number,
-        email: string,
-        login: string
-    },
+// Типизация response в profile-запросах
+type ProfileResponseType<D = {}> = {
     resultCode: ResultCodesEnum,
-    messages: Array<string>
+    messages: Array<string>,
+    fieldsErrors: Array<string>,
+    data: D
 }
 
-//
-type LogInResponseType = {
-    data: {
-        userId: number
-    },
-    resultCode: ResultCodesEnum | ResultCodesForCaptcha,
-    messages: Array<string>
+// Типизация response в Auth-запросах
+type AuthResponseType<D = {}, A = null> = {
+    resultCode: ResultCodesEnum | A,
+    messages: Array<string>,
+    data: D
 }
+/*
+D - это generic для data
+A - это generic для ResultCodesForCaptcha
+*/
 
-//
-type LogOutResponseType = {
-    data: {},
-    resultCode: ResultCodesEnum,
-    messages: Array<string>
+// Типизация data для authHeader
+type MeResponseDataType = {
+    id: number,
+    email: string,
+    login: string
 }
 
 // Типизация для captcha запроса
@@ -35,18 +33,6 @@ type CaptchaResponseType = {
     url: string,
 }
 
-/* Типизировали resultCode используя enum
-    позволяет сравнивать не просто с числами,
-        а с ключами объекта */
-export enum ResultCodesEnum {
-    Success = 0,
-    Error = 1
-}
-
-// Расширили для captcha
-export enum ResultCodesForCaptcha {
-    CaptchaIsRequired = 10
-}
 
 // ---------- Instance - хранит объект с общими настройками запроса ----------------
 const instance = axios.create({
@@ -77,40 +63,45 @@ export const followUnfollowAPI = {
 // -------------- profileAPI -------------------
 export const profileAPI = {
     userProfile(userId: number) {
-        return instance.get(`profile/${userId}`)
+        return instance.get<ProfileInfoType>(`profile/${userId}`)
+            .then(res => res.data) // useProfileData
     },
     getStatus(userId: number) {
-        return instance.get(`profile/status/${userId}`)
+        return instance.get<string>(`profile/status/${userId}`)
+            .then(res => res.data) // getStatusData
     },
     updateStatus(status: string) {
-        return instance.put(`profile/status`, {status})
+        return instance.put<ProfileResponseType>(`profile/status`, {status})
     },
     savePhoto(file: File) {
         const formData = new FormData()
         formData.append('image', file)
-        return instance.put(`profile/photo`, formData, {
+        return instance.put<ProfileResponseType<{ photos: PhotosType }>>(`profile/photo`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
         })
+            .then(res => res.data) // savePhotoData
     },
     saveProfile(data: ProfileInfoType) {
-        return instance.put('profile', data)
+        return instance.put<ProfileResponseType>('profile', data)
+            .then(res => res.data) // saveProfileData
     }
 }
 
 // -------------- Auth -------------------
 export const authAPI = {
     authHeader() {
-        return instance.get<MeResponseType>(`auth/me`)
+        return instance.get<AuthResponseType<MeResponseDataType>>(`auth/me`)
             .then(res => res.data) // meData
     },
     logIn(email: string, password: string, rememberMe: boolean, captcha: string = '') {
-        return instance.post<LogInResponseType>(`auth/login`, {email, password, rememberMe, captcha})
+        return instance.post<AuthResponseType<{ userId: number }, ResultCodesForCaptcha>>
+        (`auth/login`, {email, password, rememberMe, captcha})
             .then(res => res.data) // logInData
     },
     logOut() {
-        return instance.delete<LogOutResponseType>(`auth/login`)
+        return instance.delete<AuthResponseType>(`auth/login`)
             .then(res => res.data) // logOutData
     }
 }
