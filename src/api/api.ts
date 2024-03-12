@@ -1,6 +1,14 @@
 import axios from 'axios'
 import {PhotosType, ProfileInfoType} from '../redux/reducers/profile-reducer'
 import {ResultCodesEnum, ResultCodesForCaptcha} from '../redux/types/Types'
+import {UsersListType} from '../redux/reducers/users-reducer'
+
+// Типизация response в users-запросах
+type UserResponseType = {
+    totalCount: number,
+    error: string,
+    items: Array<UsersListType>
+}
 
 // Типизация response в profile-запросах
 type ProfileResponseType<D = {}> = {
@@ -46,17 +54,18 @@ const instance = axios.create({
 // -------------- Получение списка users -------------------
 export const usersAPI = {
     getUsers(currentPage: number, pageSize: number) {
-        return instance.get(`users?page=${currentPage}&count=${pageSize}`)
+        return instance.get<UserResponseType>(`users?page=${currentPage}&count=${pageSize}`)
+            .then(res=>res.data) // getUsersData
     }
 }
 
 // -------------- Follow and Unfollow -------------------
 export const followUnfollowAPI = {
     followUser(id: number) {
-        return instance.post(`follow/${id}`, {})
+        return instance.post<ProfileResponseType>(`follow/${id}`, {})
     },
     unfollowUser(id: number) {
-        return instance.delete(`follow/${id}`)
+        return instance.delete<ProfileResponseType>(`follow/${id}`)
     }
 }
 

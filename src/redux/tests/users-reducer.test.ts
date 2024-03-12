@@ -14,7 +14,8 @@ beforeEach(() => {
                     small: '',
                     large: ''
                 },
-                status: 'life'
+                status: 'life',
+                uniqueUrlName: ''
             },
             {
                 id: 3,
@@ -24,7 +25,8 @@ beforeEach(() => {
                     small: '',
                     large: ''
                 },
-                status: 'life'
+                status: 'life',
+                uniqueUrlName: ''
             },
             {
                 id: 6,
@@ -34,7 +36,8 @@ beforeEach(() => {
                     small: '',
                     large: ''
                 },
-                status: 'life'
+                status: 'life',
+                uniqueUrlName: ''
             }
         ],
         totalCount: 0,
@@ -80,7 +83,8 @@ test('users reducer should increase items length', () => {
                 small: '',
                 large: ''
             },
-            status: 'dead'
+            status: 'dead',
+            uniqueUrlName:''
         },
         {
             id: 5,
@@ -90,7 +94,8 @@ test('users reducer should increase items length', () => {
                 small: '',
                 large: ''
             },
-            status: 'goal'
+            status: 'goal',
+            uniqueUrlName:''
         }
     ]
 

@@ -1,6 +1,6 @@
 import {followUnfollowAPI, usersAPI} from '../../api/api'
 import {updateObjectInArray} from '../../utils/object-helpers'
-import {ThunkDispatchType, ThunkType} from '../types/Types'
+import {ResultCodesEnum, ThunkDispatchType, ThunkType} from '../types/Types'
 
 
 // Типизация
@@ -20,6 +20,7 @@ export type UsersListType = {
     photos: UsersPhotos
     status: string
     followed: boolean
+    uniqueUrlName: string
 }
 
 type UsersPhotos = {
@@ -137,16 +138,16 @@ export const getUsers = (currentPage: number, pageSize: number): ThunkType => {
         dispatch(toggleIsFetching(true))
 
         // Ответ от сервера со списком пользователей
-        const response = await usersAPI.getUsers(currentPage, pageSize)
+        const getUsersData = await usersAPI.getUsers(currentPage, pageSize)
 
         // Убрали крутилку после ответа
         dispatch(toggleIsFetching(false))
 
         // Обновили список пользователей на странице
-        dispatch(setUsers(response.data.items))
+        dispatch(setUsers(getUsersData.items))
 
         // Обновили послный список пользователей
-        dispatch(setTotalUsersCount(response.data.totalCount))
+        dispatch(setTotalUsersCount(getUsersData.totalCount))
     }
 }
 
@@ -161,13 +162,13 @@ export const newPageGetUsers = (currentPage: number, pageSize: number): ThunkTyp
         dispatch(toggleIsFetching(true))
 
         // Ответ от сервера со списком пользователей
-        const response = await usersAPI.getUsers(currentPage, pageSize)
+        const getUsersData = await usersAPI.getUsers(currentPage, pageSize)
 
         // Убрали крутилку после ответа
         dispatch(toggleIsFetching(false))
 
         // Обновили список пользователей на странице
-        dispatch(setUsers(response.data.items))
+        dispatch(setUsers(getUsersData.items))
     }
 }
 
@@ -182,7 +183,10 @@ const followUnfollow = async (dispatch: ThunkDispatchType,
 
     // Ответ с сервера
     const response = await apiMethod(id)
-    response.data.resultCode === 0 && dispatch(actionCreator(id))
+
+    // Успешный ответ от сервера
+    response.data.resultCode === ResultCodesEnum.Success &&
+    dispatch(actionCreator(id))
 
     // Разблокируем кнопку после ответа
     dispatch(toggleFollowingInProgress(false, id))
@@ -196,6 +200,7 @@ export const unFollow = (id: number): ThunkType => {
 
         // Получили ответ и изменили state
         await followUnfollow(dispatch, id, apiMethod, unfollowFriend)
+
     }
 }
 
