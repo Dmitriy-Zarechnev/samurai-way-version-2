@@ -1,4 +1,4 @@
-import {authAPI, securityAPI} from '../../api/api'
+import {authAPI, ResultCodesEnum, ResultCodesForCaptcha, securityAPI} from '../../api/api'
 import {ThunkDispatchType, ThunkType} from '../types/Types'
 
 
@@ -108,14 +108,15 @@ export const getCaptchaUrlSuccess = (url: string) => {
 // *********** Thunk - санки необходимые для общения с DAL ****************
 //  -------- Проверка авторизации на сервере ----------------
 export const authMe = (): ThunkType => async (dispatch: ThunkDispatchType) => {
-    const response = await authAPI.authHeader()
-    if (response.data.resultCode === 0) {
+    // Запрос на авторизацию
+    const meData = await authAPI.authHeader()
 
+    if (meData.resultCode === ResultCodesEnum.Success) {
         // Прошла проверка на авторизацию и данные обновились
         dispatch(setAuthUserData(
-            response.data.data.id,
-            response.data.data.email,
-            response.data.data.login,
+            meData.data.id,
+            meData.data.email,
+            meData.data.login,
             true
         ))
     }
@@ -124,39 +125,42 @@ export const authMe = (): ThunkType => async (dispatch: ThunkDispatchType) => {
 //  -------- Логинизация на сервере ----------------
 export const serverLogIn = (email: string, password: string, rememberMe: boolean, captcha: string): ThunkType =>
     async (dispatch: ThunkDispatchType) => {
-        const response = await authAPI.logIn(email, password, rememberMe, captcha)
-        if (response.data.resultCode === 0) {
+        // Запрос на логинизацию
+        const logInData = await authAPI.logIn(email, password, rememberMe, captcha)
 
+        if (logInData.resultCode === ResultCodesEnum.Success) {
             // Успешная авторизация на сайте
             dispatch(authMe())
             rememberMe && dispatch(logInServer({email, password, rememberMe}))
-        } else {
-            if (response.data.resultCode === 10) {
 
+        } else {
+            if (logInData.resultCode === ResultCodesForCaptcha.CaptchaIsRequired) {
                 // Запросили captcha при коде 10
                 dispatch(getCaptchaUrl())
             }
 
             // Неудачная авторизация на сайте
-            dispatch(serverError(response.data.messages[0]))
+            dispatch(serverError(logInData.messages[0]))
         }
     }
 
 
 //  -------- Вылогинизация на сервере ----------------
 export const serverLogOut = (): ThunkType => async (dispatch: ThunkDispatchType) => {
-    const response = await authAPI.logOut()
+    // Запрос на вылогинизацию
+    const logOutData = await authAPI.logOut()
 
     // Произошла успешная вылогинизация на сайте
-    response.data.resultCode === 0 && dispatch(setAuthUserData(null, '', '', false))
+    logOutData.resultCode === ResultCodesEnum.Success &&
+    dispatch(setAuthUserData(null, '', '', false))
 }
 
 
 //  -------- Запрос Captcha URL на сервере ----------------
 export const getCaptchaUrl = (): ThunkType => async (dispatch: ThunkDispatchType) => {
-    const response = await securityAPI.getCaptchaUrl()
+    // Запрос на получение каптчи
+    const captchaData = await securityAPI.getCaptchaUrl()
 
     // Получили URL с сервера и задиспатчили в state
-    const captchaUrl = response.data.url
-    dispatch(getCaptchaUrlSuccess(captchaUrl))
+    dispatch(getCaptchaUrlSuccess(captchaData.url))
 }

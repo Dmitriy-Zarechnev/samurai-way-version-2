@@ -1,6 +1,53 @@
 import axios from 'axios'
 import {ProfileInfoType} from '../redux/reducers/profile-reducer'
 
+// Типизация data которая придет в response
+
+//
+type MeResponseType = {
+    data: {
+        id: number,
+        email: string,
+        login: string
+    },
+    resultCode: ResultCodesEnum,
+    messages: Array<string>
+}
+
+//
+type LogInResponseType = {
+    data: {
+        userId: number
+    },
+    resultCode: ResultCodesEnum | ResultCodesForCaptcha,
+    messages: Array<string>
+}
+
+//
+type LogOutResponseType = {
+    data: {},
+    resultCode: ResultCodesEnum,
+    messages: Array<string>
+}
+
+// Типизация для captcha запроса
+type CaptchaResponseType = {
+    url: string,
+}
+
+/* Типизировали resultCode используя enum
+    позволяет сравнивать не просто с числами,
+        а с ключами объекта */
+export enum ResultCodesEnum {
+    Success = 0,
+    Error = 1
+}
+
+// Расширили для captcha
+export enum ResultCodesForCaptcha {
+    CaptchaIsRequired = 10
+}
+
 // ---------- Instance - хранит объект с общими настройками запроса ----------------
 const instance = axios.create({
     withCredentials: true,
@@ -55,19 +102,23 @@ export const profileAPI = {
 // -------------- Auth -------------------
 export const authAPI = {
     authHeader() {
-        return instance.get(`auth/me`)
+        return instance.get<MeResponseType>(`auth/me`)
+            .then(res => res.data) // meData
     },
     logIn(email: string, password: string, rememberMe: boolean, captcha: string = '') {
-        return instance.post(`auth/login`, {email, password, rememberMe, captcha})
+        return instance.post<LogInResponseType>(`auth/login`, {email, password, rememberMe, captcha})
+            .then(res => res.data) // logInData
     },
     logOut() {
-        return instance.delete(`auth/login`)
+        return instance.delete<LogOutResponseType>(`auth/login`)
+            .then(res => res.data) // logOutData
     }
 }
 
 // -------------- Security Capture -------------------
 export const securityAPI = {
     getCaptchaUrl() {
-        return instance.get(`security/get-captcha-url`)
+        return instance.get<CaptchaResponseType>(`security/get-captcha-url`)
+            .then(res => res.data) // captchaData
     }
 }
