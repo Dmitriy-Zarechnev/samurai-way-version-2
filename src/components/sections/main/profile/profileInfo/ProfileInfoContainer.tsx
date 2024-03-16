@@ -45,13 +45,19 @@ class ProfileInfoAPIComponent extends React.PureComponent<ProfileInfoAPIComponen
 
     // Общий метод для методов жизненного цикла
     loadUserData() {
-        let userId = Number(this.props.match.params.userId)
-        if (!userId) {
-            userId = 30743
+        let userlocId: number | null = Number(this.props.match.params.userId)
+
+        // Если userlocId пустой, добавляем того, кто зарегался
+        if (!userlocId) {
+            userlocId = this.props.userId
         }
 
-        this.props.goToPage(userId)
-        this.props.getStatus(userId)
+        // Переходим на страницу того, чей id в url
+        if (userlocId) {
+            this.props.goToPage(userlocId)
+            this.props.getStatus(userlocId)
+        }
+
     }
 
     render() {
