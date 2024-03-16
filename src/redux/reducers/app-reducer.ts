@@ -1,19 +1,18 @@
 import {authMe} from './auth-reducer'
-import {ThunkDispatchType, ThunkType} from '../types/Types'
+import {ThunkDispatchType} from '../types/Types'
 
-// Типизация
+// Типизация Actions
 export type AppReducerActionsType =
     ReturnType<typeof initializedSuccess>
 
-
+// Типизация AppInitialState
 export type AppInitialState = typeof initialState
-
 
 // *********** Константы названий экшенов ****************
 const INITIALIZED_SUCCESS = '/app/INITIALIZED-SUCCESS'
 
 
-// *********** Первоначальный стэйт для authReducer ****************
+// *********** Первоначальный стэйт для appReducer ****************
 const initialState = {
     initialized: false
 }
@@ -23,10 +22,7 @@ const initialState = {
 export const appReducer = (state = initialState, action: AppReducerActionsType): AppInitialState => {
     switch (action.type) {
         case INITIALIZED_SUCCESS:
-            return {
-                ...state,
-                initialized: true
-            }
+            return {...state, initialized: true}
 
         default:
             return state
@@ -42,7 +38,7 @@ export const initializedSuccess = () => {
 
 // *********** Thunk - санки необходимые для общения с DAL ****************
 //  -------- Инициализация на сайте ----------------
-export const initializeApp = (): ThunkType => (dispatch: ThunkDispatchType) => {
+export const initializeApp = () => (dispatch: ThunkDispatchType) => {
     // Диспатчим thunk, которая совершит инициализацию
     const promise = dispatch(authMe())
 

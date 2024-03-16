@@ -7,7 +7,7 @@ import {authReducer} from './reducers/auth-reducer'
 import thunkMiddleware from 'redux-thunk'
 import {appReducer} from './reducers/app-reducer'
 
-
+// Общий редьюсер для всего приложения
 const rootReducer = combineReducers({
     profilePage: profileReducer,
     messagesPage: messagesReducer,
@@ -20,6 +20,7 @@ const rootReducer = combineReducers({
 // Типизация всего STATE
 export type AppRootState = ReturnType<typeof rootReducer>
 
+// STORE приложения
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware))
 
 export default store
