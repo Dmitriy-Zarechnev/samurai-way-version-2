@@ -24,6 +24,7 @@ type AuthResponseType<D = {}, A = null> = {
     messages: Array<string>,
     data: D
 }
+
 /*
 D - это generic для data
 A - это generic для ResultCodesForCaptcha
