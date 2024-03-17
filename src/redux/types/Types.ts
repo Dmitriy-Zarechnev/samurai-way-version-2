@@ -31,3 +31,14 @@ export enum ResultCodesEnum {
 export enum ResultCodesForCaptcha {
     CaptchaIsRequired = 10
 }
+
+// Крутая автоматическая типизация для Actions
+/*
+type PropertiesType<T> = T extends { [key: string]: infer U } ? U : never
+
+type InferActionsType<T extends { [key: string]: (...args: any[]) => any }> = ReturnType<PropertiesType<T>>
+
+ */
+
+/* Для работы с этой типизацией необходимо собрать все actions creators в один объект,
+где actions creators будут методами. InferActionsType<T> на место T передать этот объект */
