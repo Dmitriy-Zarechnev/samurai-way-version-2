@@ -191,7 +191,7 @@ export const failUpdate = (failMessage: string) => {
 
 // *********** Thunk - санки необходимые для общения с DAL ****************
 //  -------- Загрузка страницы пользователя ----------------
-export const goToPage = (id: number): ThunkType => async (dispatch: ThunkDispatchType) => {
+export const goToPage = (id: number) => async (dispatch: ThunkDispatchType) => {
     // Запросили данные profile с сервера при пустом url
     const useProfileData = await profileAPI.userProfile(id)
 
@@ -206,7 +206,7 @@ export const goToPage = (id: number): ThunkType => async (dispatch: ThunkDispatc
 
 
 //  -------- Получение статуса пользователя ----------------
-export const getStatus = (id: number): ThunkType => async (dispatch: ThunkDispatchType) => {
+export const getStatus = (id: number) => async (dispatch: ThunkDispatchType) => {
     // Запросили данные status с сервера
     const getStatusData = await profileAPI.getStatus(id)
 
@@ -216,7 +216,7 @@ export const getStatus = (id: number): ThunkType => async (dispatch: ThunkDispat
 
 
 //  -------- Изменение статуса пользователя ----------------
-export const updateStatus = (status: string): ThunkType => async (dispatch: ThunkDispatchType) => {
+export const updateStatus = (status: string) => async (dispatch: ThunkDispatchType) => {
 
     try {
         // Отправили status на сервер и ждем ответ
@@ -233,7 +233,7 @@ export const updateStatus = (status: string): ThunkType => async (dispatch: Thun
 
 
 //  -------- Загрузка фото пользователя ----------------
-export const savePhoto = (file: File): ThunkType => async (dispatch: ThunkDispatchType) => {
+export const savePhoto = (file: File) => async (dispatch: ThunkDispatchType) => {
     // Отправили photo на сервер и ждем
     const savePhotoData = await profileAPI.savePhoto(file)
 

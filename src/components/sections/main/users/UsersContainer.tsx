@@ -26,7 +26,6 @@ type UsersAPIComponentMapDispatchToProps = {
 
 class UsersAPIComponent extends React.PureComponent<UsersAPIComponentPropsType> {
 
-
     //  -------- Первая загрузка списка пользователей ----------------
     componentDidMount() {
         this.props.getUsers(this.props.currentPage, this.props.pageSize)
