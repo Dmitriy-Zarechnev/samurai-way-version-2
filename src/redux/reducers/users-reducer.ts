@@ -28,7 +28,6 @@ type UsersPhotos = {
     large: string
 }
 
-
 export type UsersAPIComponentActionsType =
     ReturnType<typeof followFriend> |
     ReturnType<typeof unfollowFriend> |
