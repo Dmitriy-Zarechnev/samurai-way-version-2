@@ -35,11 +35,9 @@ export const LogIn = React.memo((props: LogInPropsType) => {
 
     const onSubmit: SubmitHandler<Inputs> = (data) => {
         props.onSubmitForm(data)
-
-        reset()
     }
 
-    // Redirect  на страницу профиля, при успешной авторизации
+    // Redirect на страницу профиля, при успешной авторизации
     if (props.isAuth) return <Redirect to={'/profile'}/>
 
     return (

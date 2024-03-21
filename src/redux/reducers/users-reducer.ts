@@ -12,6 +12,7 @@ export type UsersInitialState = {
     currentPage: number
     isFetching: boolean
     followingInProgress: number[]
+    filter: UsersFilterType
 }
 
 export type UsersListType = {
@@ -28,6 +29,11 @@ type UsersPhotos = {
     large: string
 }
 
+export type UsersFilterType = {
+    term: string
+    friends: null | boolean
+}
+
 export type UsersAPIComponentActionsType =
     ReturnType<typeof followFriend> |
     ReturnType<typeof unfollowFriend> |
@@ -35,7 +41,8 @@ export type UsersAPIComponentActionsType =
     ReturnType<typeof setCurrentPage> |
     ReturnType<typeof setTotalUsersCount> |
     ReturnType<typeof toggleIsFetching> |
-    ReturnType<typeof toggleFollowingInProgress>
+    ReturnType<typeof toggleFollowingInProgress> |
+    ReturnType<typeof setFilter>
 
 
 // *********** Константы названий экшенов ****************
@@ -46,6 +53,7 @@ const SET_CURRENT_PAGE = '/users/SET-CURRENT-PAGE'
 const SET_TOTAL_USERS_COUNT = '/users/SET-TOTAL-USERS-COUNT'
 const TOGGLE_IS_FETCHING = '/users/TOGGLE-IS-FETCHING'
 const TOGGLE_IS_FOLLOWING_IN_PROGRESS = '/users/TOGGLE-IS-FOLLOWING-IN-PROGRESS'
+const SET_FILTER = '/users/SET-FILTER'
 
 
 // *********** Первоначальный стэйт для usersReducer ****************
@@ -53,10 +61,14 @@ const initialState: UsersInitialState = {
     items: [],
     totalCount: 0,
     error: '',
-    pageSize: 7,
+    pageSize: 10,
     currentPage: 1,
     isFetching: true,
-    followingInProgress: []
+    followingInProgress: [],
+    filter: {
+        term: '',
+        friends: null
+    }
 }
 
 
@@ -99,6 +111,11 @@ export const usersReducer = (state = initialState, action: UsersAPIComponentActi
                         : state.followingInProgress.filter(id => id != action.payload.userId)
             }
 
+        case SET_FILTER:
+            return {
+                ...state,
+                filter: action.payload.filter
+            }
         default:
             return state
     }
@@ -127,17 +144,20 @@ export const toggleIsFetching = (isFetching: boolean) => {
 export const toggleFollowingInProgress = (isFetching: boolean, userId: number) => {
     return {type: TOGGLE_IS_FOLLOWING_IN_PROGRESS, payload: {isFetching, userId}} as const
 }
+export const setFilter = (filter:UsersFilterType) => {
+    return {type: SET_FILTER, payload: {filter}} as const
+}
 
 
 // *********** Thunk - санки необходимые для общения с DAL ****************
 //  -------- Первая загрузка списка пользователей ----------------
-export const getUsers = (currentPage: number, pageSize: number): ThunkType => {
+export const getUsers = (currentPage: number, pageSize: number, filter: UsersFilterType): ThunkType => {
     return async (dispatch: ThunkDispatchType) => {
         // Показали крутилку во время ожидания
         dispatch(toggleIsFetching(true))
 
         // Ответ от сервера со списком пользователей
-        const getUsersData = await usersAPI.getUsers(currentPage, pageSize)
+        const getUsersData = await usersAPI.getUsers(currentPage, pageSize, filter.term, filter.friends)
 
         // Убрали крутилку после ответа
         dispatch(toggleIsFetching(false))
@@ -151,23 +171,29 @@ export const getUsers = (currentPage: number, pageSize: number): ThunkType => {
 }
 
 //  -------- Изменение текущей страницы ----------------
-export const newPageGetUsers = (currentPage: number, pageSize: number): ThunkType => {
+export const newPageGetUsers = (currentPage: number, pageSize: number, filter: UsersFilterType): ThunkType => {
     return async (dispatch: ThunkDispatchType) => {
 
         // Выбрали другую текущую страницу
         dispatch(setCurrentPage(currentPage))
 
+        // Поменяли filter в соответствии с данными из формы
+        dispatch(setFilter(filter))
+
         // Показали крутилку во время ожидания
         dispatch(toggleIsFetching(true))
 
         // Ответ от сервера со списком пользователей
-        const getUsersData = await usersAPI.getUsers(currentPage, pageSize)
+        const getUsersData = await usersAPI.getUsers(currentPage, pageSize, filter.term, filter.friends)
 
         // Убрали крутилку после ответа
         dispatch(toggleIsFetching(false))
 
         // Обновили список пользователей на странице
         dispatch(setUsers(getUsersData.items))
+
+        // Обновили послный список пользователей
+        dispatch(setTotalUsersCount(getUsersData.totalCount))
     }
 }
 

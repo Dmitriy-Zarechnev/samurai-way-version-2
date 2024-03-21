@@ -7,7 +7,7 @@ type ProfileInputFormPropsType = {
     value: string,
     name: string,
     id: string,
-    defValue: string
+    defValue?: string
     addInputClass?: string,
     addLabelClass?: string
 }
