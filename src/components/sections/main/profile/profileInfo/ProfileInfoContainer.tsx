@@ -57,7 +57,6 @@ class ProfileInfoAPIComponent extends React.PureComponent<ProfileInfoAPIComponen
             this.props.goToPage(userlocId)
             this.props.getStatus(userlocId)
         }
-
     }
 
     render() {

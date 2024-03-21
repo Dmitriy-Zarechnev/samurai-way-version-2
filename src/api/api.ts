@@ -11,7 +11,7 @@ type UserResponseType = {
 }
 
 // Типизация response в profile-запросах
-type ProfileResponseType<D = {}> = {
+export type ProfileResponseType<D = {}> = {
     resultCode: ResultCodesEnum,
     messages: Array<string>,
     fieldsErrors: Array<string>,
@@ -56,7 +56,7 @@ const instance = axios.create({
 export const usersAPI = {
     getUsers(currentPage: number, pageSize: number) {
         return instance.get<UserResponseType>(`users?page=${currentPage}&count=${pageSize}`)
-            .then(res=>res.data) // getUsersData
+            .then(res => res.data) // getUsersData
     }
 }
 
@@ -64,9 +64,11 @@ export const usersAPI = {
 export const followUnfollowAPI = {
     followUser(id: number) {
         return instance.post<ProfileResponseType>(`follow/${id}`, {})
+            .then((res => res.data))
     },
     unfollowUser(id: number) {
         return instance.delete<ProfileResponseType>(`follow/${id}`)
+            .then((res => res.data))
     }
 }
 

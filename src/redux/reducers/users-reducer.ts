@@ -1,4 +1,4 @@
-import {followUnfollowAPI, usersAPI} from '../../api/api'
+import {followUnfollowAPI, ProfileResponseType, usersAPI} from '../../api/api'
 import {updateObjectInArray} from '../../utils/object-helpers'
 import {ResultCodesEnum, ThunkDispatchType, ThunkType} from '../types/Types'
 
@@ -175,7 +175,7 @@ export const newPageGetUsers = (currentPage: number, pageSize: number): ThunkTyp
 //  -------- Вспомогательная функция для дружбы ----------------
 const followUnfollow = async (dispatch: ThunkDispatchType,
                               id: number,
-                              apiMethod: (id: number) => Promise<any>,
+                              apiMethod: (id: number) => Promise<ProfileResponseType>,
                               actionCreator: (id: number) => UsersAPIComponentActionsType) => {
     // Используется, чтобы кнопка была disable во время ожидания ответа
     dispatch(toggleFollowingInProgress(true, id))
@@ -184,7 +184,7 @@ const followUnfollow = async (dispatch: ThunkDispatchType,
     const response = await apiMethod(id)
 
     // Успешный ответ от сервера
-    response.data.resultCode === ResultCodesEnum.Success &&
+    response.resultCode === ResultCodesEnum.Success &&
     dispatch(actionCreator(id))
 
     // Разблокируем кнопку после ответа
