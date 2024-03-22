@@ -1,4 +1,4 @@
-import {followFriend, setCurrentPage, setTotalUsersCount, setUsers, toggleFollowingInProgress, toggleIsFetching, unfollowFriend, UsersInitialState, usersReducer} from '../reducers/users-reducer'
+import {followFriend, setCurrentPage, setFilter, setTotalUsersCount, setUsers, toggleFollowingInProgress, toggleIsFetching, unfollowFriend, UsersInitialState, usersReducer} from '../reducers/users-reducer'
 
 
 let startState: UsersInitialState
@@ -88,7 +88,7 @@ test('users reducer should increase items length', () => {
                 large: ''
             },
             status: 'dead',
-            uniqueUrlName:''
+            uniqueUrlName: ''
         },
         {
             id: 5,
@@ -99,7 +99,7 @@ test('users reducer should increase items length', () => {
                 large: ''
             },
             status: 'goal',
-            uniqueUrlName:''
+            uniqueUrlName: ''
         }
     ]
 
@@ -171,4 +171,18 @@ test('users reducer should reduce followingInProgress length by one', () => {
     expect(newState.followingInProgress.length).toBe(2)
     expect(newState.followingInProgress[1]).toBe(4)
     expect(newState.followingInProgress.length).not.toBe(startState.followingInProgress.length)
+})
+
+
+test('users reducer should change filter', () => {
+
+    const filter = {
+        term: '234',
+        friends: true
+    }
+
+    const newState = usersReducer(startState, setFilter(filter))
+
+    expect(newState.filter.term).toBe(filter.term)
+    expect(newState.filter.friends).toBe(filter.friends)
 })

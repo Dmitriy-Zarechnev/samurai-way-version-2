@@ -32,18 +32,24 @@ export const UsersSearchForm = React.memo((props: UsersSearchFormPropsType) => {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className={S.wrapper}>
-            <ProfileInputForm
-                register={register}
-                value={'term'}
-                id={'term'}
-                name={'Users Search'}/>
-            <select {...register('friends')}>
-                <option value="null">All</option>
-                <option value="true">Only Followed</option>
-                <option value="false">Only Unfollowed</option>
-            </select>
-            <Button name={'Find'}/>
+        <form onSubmit={handleSubmit(onSubmit)} className={S.form_wrapper}>
+            <div className={S.inputs}>
+                <ProfileInputForm
+                    register={register}
+                    value={'term'}
+                    id={'term'}
+                    name={'Users Search'}
+                    addInputClass={S.inputFind}
+                    addLabelClass={S.label}
+                />
+
+                <select {...register('friends')}>
+                    <option value="null">All</option>
+                    <option value="true">Only Followed</option>
+                    <option value="false">Only Unfollowed</option>
+                </select>
+            </div>
+            <Button name={'Find'} additionalClass={S.button}/>
         </form>
     )
 })

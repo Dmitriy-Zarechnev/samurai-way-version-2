@@ -4,7 +4,7 @@ import {ResultCodesEnum, ResultCodesForCaptcha} from '../redux/types/Types'
 import {UsersListType} from '../redux/reducers/users-reducer'
 
 // Типизация response в users-запросах
-type UserResponseType = {
+export type UserResponseType = {
     totalCount: number,
     error: string,
     items: Array<UsersListType>

@@ -1,0 +1,23 @@
+@import "../../../../../../ColorVar.module.css";
+
+.form_wrapper {
+    display: flex;
+    margin-bottom: 5px;
+}
+
+.inputs {
+}
+
+.label{
+    font-size: 20px;
+    color:var(--secondary-bg)
+}
+
+.inputFind {
+    width: 300px
+}
+
+.button {
+    align-self: center;
+    margin-right: 5px;
+}

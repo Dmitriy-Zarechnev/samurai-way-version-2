@@ -116,6 +116,7 @@ export const usersReducer = (state = initialState, action: UsersAPIComponentActi
                 ...state,
                 filter: {...action.payload.filter}
             }
+
         default:
             return state
     }

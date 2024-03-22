@@ -49,7 +49,6 @@ class UsersAPIComponent extends React.PureComponent<UsersAPIComponentPropsType> 
         this.props.getUsers(1, pageSize, filter)
     }
 
-
     render() {
         const {pagStart, pagCenter, pagEnd} = this.onPagination()
 
