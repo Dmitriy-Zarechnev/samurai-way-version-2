@@ -27,7 +27,6 @@ export const UsersSearchForm = React.memo((props: UsersSearchFormPropsType) => {
             term: data.term,
             friends: data.friends === 'null' ? null : data.friends === 'true'
         }
-        console.log(filter)
 
         props.onFilterChanged(filter)
     }
