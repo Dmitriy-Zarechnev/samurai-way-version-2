@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import S from './Users.module.css'
+import S from './UsersPage.module.css'
 import {Pagination} from '../../../common/pagination/Pagination'
 import {getUsers, UsersFilterType} from '../../../../redux/reducers/users-reducer'
 import {User} from './user/User'
@@ -10,7 +10,7 @@ import {onPaginationHelper} from '../../../../utils/pagination-helper'
 import {Preloader} from '../../../common/preloader/Preloader'
 
 
-export const Users = React.memo(() => {
+export const UsersPage = () => {
 
     // Используем хук useSelector и получаем данные из state
     const items = useSelector(getUsersS)
@@ -71,4 +71,4 @@ export const Users = React.memo(() => {
                 {items.map(el => <User key={el.id} user={el}/>)}
             </div>
     )
-})
+}
