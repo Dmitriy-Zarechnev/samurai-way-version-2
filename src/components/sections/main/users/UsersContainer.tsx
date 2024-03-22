@@ -1,19 +1,6 @@
-import React from 'react'
-import {connect} from 'react-redux'
-import {follow, getUsers, unFollow, UsersFilterType} from '../../../../redux/reducers/users-reducer'
-import {Users} from './Users'
-import {Preloader} from '../../../common/preloader/Preloader'
-import {AppRootState} from '../../../../redux/redux-store'
-import {compose} from 'redux'
-import {getCurrentPageS, getIsFetchingS, getIsFollowingInProgressS, getPageSizeS, getTotalCountS, getUsersFilterS, getUsersS} from '../../../../redux/selectors/users-selectors'
-import {onPaginationHelper} from '../../../../utils/pagination-helper'
-
-
 // Типизация
-type UsersAPIComponentPropsType =
-    UsersAPIComponentMapStateToProps &
-    UsersAPIComponentMapDispatchToProps
-
+export type UsersAPIComponentPropsType = ''
+/*
 type UsersAPIComponentMapStateToProps = ReturnType<typeof mapStateToProps>
 
 type UsersAPIComponentMapDispatchToProps = {
@@ -27,7 +14,7 @@ class UsersAPIComponent extends React.PureComponent<UsersAPIComponentPropsType> 
 
     //  -------- Первая загрузка списка пользователей ----------------
     componentDidMount() {
-        this.props.getUsers(this.props.currentPage, this.props.pageSize, this.props.filter)
+        this.props.getUsers(this.props.currentPage, this.props.pageSize, {term: '', friends: null})
     }
 
     //  -------- Изменение текущей страницы ----------------
@@ -56,15 +43,10 @@ class UsersAPIComponent extends React.PureComponent<UsersAPIComponentPropsType> 
                 {this.props.isFetching
                     ? <Preloader isFetching={this.props.isFetching}/>
                     : <Users
-                        items={this.props.items}
-                        totalCount={this.props.totalCount}
-                        pageSize={this.props.pageSize}
-                        currentPage={this.props.currentPage}
                         onPageChanged={this.onPageChanged}
                         pagStart={pagStart}
                         pagCenter={pagCenter}
                         pagEnd={pagEnd}
-                        followingInProgress={this.props.followingInProgress}
                         follow={this.props.follow}
                         unFollow={this.props.unFollow}
                         onFilterChanged={this.onFilterChanged}
@@ -77,12 +59,10 @@ class UsersAPIComponent extends React.PureComponent<UsersAPIComponentPropsType> 
 
 const mapStateToProps = (state: AppRootState) => {
     return {
-        items: getUsersS(state),
         totalCount: getTotalCountS(state),
         pageSize: getPageSizeS(state),
         currentPage: getCurrentPageS(state),
         isFetching: getIsFetchingS(state),
-        followingInProgress: getIsFollowingInProgressS(state),
         filter: getUsersFilterS(state)
     }
 }
@@ -92,3 +72,5 @@ export const UsersContainer = compose<React.ComponentType>(
     connect(mapStateToProps,
         {getUsers, follow, unFollow}
     ))(UsersAPIComponent)
+
+ */

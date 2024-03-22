@@ -1,56 +1,74 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import S from './Users.module.css'
 import {Pagination} from '../../../common/pagination/Pagination'
-import {UsersFilterType, UsersListType} from '../../../../redux/reducers/users-reducer'
+import {getUsers, UsersFilterType} from '../../../../redux/reducers/users-reducer'
 import {User} from './user/User'
 import {UsersSearchForm} from './user/usersSearch/UsersSearchForm'
+import {useDispatch, useSelector} from 'react-redux'
+import {getCurrentPageS, getIsFetchingS, getPageSizeS, getTotalCountS, getUsersFilterS, getUsersS} from '../../../../redux/selectors/users-selectors'
+import {onPaginationHelper} from '../../../../utils/pagination-helper'
+import {Preloader} from '../../../common/preloader/Preloader'
 
 
-type UsersPropsType = {
-    items: UsersListType[]
-    totalCount: number
-    pageSize: number
-    currentPage: number
-    pagStart: number[]
-    pagCenter: number[]
-    pagEnd: number[]
-    followingInProgress: number[]
-    onPageChanged: (currentPage: number) => void
-    unFollow: (id: number) => void
-    follow: (id: number) => void
-    onFilterChanged:(filter: UsersFilterType)=>void
-}
+export const Users = React.memo(() => {
 
-export const Users = React.memo((props: UsersPropsType) => {
+    // Используем хук useSelector и получаем данные из state
+    const items = useSelector(getUsersS)
+    const currentPage = useSelector(getCurrentPageS)
+    const pageSize = useSelector(getPageSizeS)
+    const filter = useSelector(getUsersFilterS)
+    const totalCount = useSelector(getTotalCountS)
+    const isFetching = useSelector(getIsFetchingS)
+
+    //  Используем хук useDispatch и получаем dispatch
+    const dispatch = useDispatch()
+
+    //  -------- Первая загрузка списка пользователей ----------------
+    useEffect(() => {
+        dispatch(getUsers(1, pageSize, {term: '', friends: null}))
+    }, [])
+
+
+    //  -------- Изменение текущей страницы ----------------
+    const onPageChanged = (currentPage: number) => {
+        dispatch(getUsers(currentPage, pageSize, filter))
+    }
+
+
+    // ----- Изменили filter и запросили новых пользователей -------
+    const onFilterChanged = (filter: UsersFilterType) => {
+        dispatch(getUsers(1, pageSize, filter))
+    }
+
+
+    // ----- Изменение списка пагинации при переключении -------
+    const {pagStart, pagCenter, pagEnd} = onPaginationHelper(totalCount, pageSize, currentPage)
+
 
     return (
-        <div className={S.users_lists}>
-            <div className={S.users_lists__pagination}>
-                <Pagination
-                    currentArray={props.pagStart}
-                    onPageChanged={props.onPageChanged}
-                    currentPage={props.currentPage}/>
-                {props.pagStart.length > 0 && <span className={S.users_lists__dotes}>... </span>}
+        isFetching
+            ? <Preloader isFetching={isFetching}/>
+            : <div className={S.users_lists}>
+                <div className={S.users_lists__pagination}>
+                    <Pagination
+                        currentArray={pagStart}
+                        onPageChanged={onPageChanged}
+                        currentPage={currentPage}/>
+                    {pagStart.length > 0 && <span className={S.users_lists__dotes}>... </span>}
 
-                <Pagination
-                    currentArray={props.pagCenter}
-                    onPageChanged={props.onPageChanged}
-                    currentPage={props.currentPage}/>
+                    <Pagination
+                        currentArray={pagCenter}
+                        onPageChanged={onPageChanged}
+                        currentPage={currentPage}/>
 
-                {props.pagEnd.length > 0 && <span className={S.users_lists__dotes}>... </span>}
-                <Pagination
-                    currentArray={props.pagEnd}
-                    onPageChanged={props.onPageChanged}
-                    currentPage={props.currentPage}/>
+                    {pagEnd.length > 0 && <span className={S.users_lists__dotes}>... </span>}
+                    <Pagination
+                        currentArray={pagEnd}
+                        onPageChanged={onPageChanged}
+                        currentPage={currentPage}/>
+                </div>
+                <UsersSearchForm onFilterChanged={onFilterChanged}/>
+                {items.map(el => <User key={el.id} user={el}/>)}
             </div>
-            <UsersSearchForm onFilterChanged={props.onFilterChanged}/>
-            {props.items.map(el => {
-                return (
-                    <User key={el.id} user={el}
-                          followingInProgress={props.followingInProgress}
-                          unFollow={props.unFollow} follow={props.follow}/>
-                )
-            })}
-        </div>
     )
 })

@@ -3,17 +3,33 @@ import S from './User.module.css'
 import {NavLink} from 'react-router-dom'
 import min from '../../../../../assets/images/UserDefault.jpg'
 import {Button} from '../../../../common/button/Button'
-import {UsersListType} from '../../../../../redux/reducers/users-reducer'
+import {follow, unFollow, UsersListType} from '../../../../../redux/reducers/users-reducer'
+import {useDispatch, useSelector} from 'react-redux'
+import {getIsFollowingInProgressS} from '../../../../../redux/selectors/users-selectors'
 
 type UserPropsType = {
     user: UsersListType
-    followingInProgress: number[]
-    unFollow: (id: number) => void
-    follow: (id: number) => void
 }
 
-
 export const User = React.memo((props: UserPropsType) => {
+
+    // Используем хук useSelector и получаем данные из state
+    const followingInProgress = useSelector(getIsFollowingInProgressS)
+    //  Используем хук useDispatch и получаем dispatch
+    const dispatch = useDispatch()
+
+    // ----- Функция для подписки и отписки -------
+    const onClickHandler = () => {
+        props.user.followed
+            ? dispatch(unFollow(props.user.id))
+            : dispatch(follow(props.user.id))
+    }
+
+    // ----- Дополнительный класс кнопки -------
+    const addClass = props.user.followed
+        ? `${S.users_down_list__btn} ${S.unfollow_red}`
+        : `${S.users_down_list__btn}`
+
     return (
         <div className={S.users_list}>
             <div className={S.users_up_list}>
@@ -33,22 +49,9 @@ export const User = React.memo((props: UserPropsType) => {
 
                 <Button
                     name={props.user.followed ? 'UnFollow' : 'Follow'}
-                    onClick={
-                        props.user.followed
-                            ? () => {
-                                props.unFollow(props.user.id)
-                            }
-                            : () => {
-                                props.follow(props.user.id)
-                            }
-                    }
-
-                    additionalClass={
-                        props.user.followed
-                            ? `${S.users_down_list__btn} ${S.unfollow_red}`
-                            : S.users_down_list__btn}
-
-                    disabled={props.followingInProgress.some(id => id === props.user.id)}
+                    onClick={onClickHandler}
+                    additionalClass={addClass}
+                    disabled={followingInProgress.some(id => id === props.user.id)}
                 />
             </div>
         </div>
