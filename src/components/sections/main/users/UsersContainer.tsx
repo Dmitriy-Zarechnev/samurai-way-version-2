@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {follow, getUsers, setFilter, unFollow, UsersFilterType} from '../../../../redux/reducers/users-reducer'
+import {follow, getUsers, unFollow, UsersFilterType} from '../../../../redux/reducers/users-reducer'
 import {Users} from './Users'
 import {Preloader} from '../../../common/preloader/Preloader'
 import {AppRootState} from '../../../../redux/redux-store'
@@ -18,7 +18,6 @@ type UsersAPIComponentMapStateToProps = ReturnType<typeof mapStateToProps>
 
 type UsersAPIComponentMapDispatchToProps = {
     getUsers: (currentPage: number, pageSize: number, filter: UsersFilterType) => void
-    setFilter: (filter: UsersFilterType) => void
     unFollow: (id: number) => void
     follow: (id: number) => void
 }
@@ -91,5 +90,5 @@ const mapStateToProps = (state: AppRootState) => {
 export const UsersContainer = compose<React.ComponentType>(
     // withAuthRedirect,
     connect(mapStateToProps,
-        {getUsers, follow, unFollow, setFilter}
+        {getUsers, follow, unFollow}
     ))(UsersAPIComponent)
