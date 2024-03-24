@@ -163,6 +163,7 @@ export const getUsers = (currentPage: number, pageSize: number, filter: UsersFil
         // Показали крутилку во время ожидания
         dispatch(toggleIsFetching(true))
 
+
         try {
             // Ответ от сервера со списком пользователей
             const getUsersData = await usersAPI.getUsers(currentPage, pageSize, filter.term, filter.friends)
