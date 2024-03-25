@@ -4,14 +4,14 @@ import {MyDialogsContainer} from './myDialogs/MyDialogsContainer'
 import {MyMessagesContainer} from './myMessages/MyMessagesContainer'
 
 
- export const Messages = React.memo(() => {
+ export const Messages = () => {
     return (
         <section className={S.messages}>
             <MyDialogsContainer/>
             <MyMessagesContainer/>
         </section>
     )
-})
+}
 
 
 
