@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useCallback, useEffect} from 'react'
 import S from './UsersPage.module.css'
 import {Pagination} from '../../../common/pagination/Pagination'
 import {getUsers, UsersFilterType} from '../../../../redux/reducers/users-reducer'
@@ -36,13 +36,14 @@ export const UsersPage = () => {
 
 
     // ----- Изменили filter и запросили новых пользователей -------
-    const onFilterChanged = (filter: UsersFilterType) => {
+    const onFilterChanged = useCallback((filter: UsersFilterType) => {
         dispatch(getUsers(1, pageSize, filter))
-    }
+    }, [pageSize, filter])
 
 
     // ----- Изменение списка пагинации при переключении -------
-    const {pagStart, pagCenter, pagEnd} = onPaginationHelper(totalCount, pageSize, currentPage)
+    const {pagStart, pagCenter, pagEnd} =
+        onPaginationHelper(totalCount, pageSize, currentPage)
 
 
     return (

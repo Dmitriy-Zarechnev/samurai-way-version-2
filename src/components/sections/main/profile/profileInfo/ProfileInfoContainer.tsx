@@ -24,7 +24,6 @@ type ProfileInfoAPIComponentMapDispatchToProps = {
 
 class ProfileInfoAPIComponent extends React.PureComponent<ProfileInfoAPIComponentPropsType> {
 
-
     //  -------- Отправка после редактирования Profile ----------------
     onSubmitProfileDataForm = (data: ProfileInfoType) => {
         this.props.saveProfile(data)
@@ -37,7 +36,7 @@ class ProfileInfoAPIComponent extends React.PureComponent<ProfileInfoAPIComponen
     }
 
     //  -------- Обновление страницы пользователя ----------------
-    componentDidUpdate(prevProps: Readonly<ProfileInfoAPIComponentPropsType>, prevState: Readonly<{}>) {
+    componentDidUpdate(prevProps: Readonly<ProfileInfoAPIComponentPropsType>) {
         if (this.props.match.params.userId !== prevProps.match.params.userId) {
             this.loadUserData()
         }
@@ -45,17 +44,17 @@ class ProfileInfoAPIComponent extends React.PureComponent<ProfileInfoAPIComponen
 
     // Общий метод для методов жизненного цикла
     loadUserData() {
-        let userlocId: number | null = Number(this.props.match.params.userId)
+        let userlogId: number | null = Number(this.props.match.params.userId)
 
-        // Если userlocId пустой, добавляем того, кто зарегался
-        if (!userlocId) {
-            userlocId = this.props.userId
+        // Если userlogId пустой, добавляем того, кто зарегался
+        if (!userlogId) {
+            userlogId = this.props.userId
         }
 
         // Переходим на страницу того, чей id в url
-        if (userlocId) {
-            this.props.goToPage(userlocId)
-            this.props.getStatus(userlocId)
+        if (userlogId) {
+            this.props.goToPage(userlogId)
+            this.props.getStatus(userlogId)
         }
     }
 
