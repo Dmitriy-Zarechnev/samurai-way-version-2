@@ -16,18 +16,19 @@ type FormType = {
 
 
 export const UsersSearchForm = React.memo((props: UsersSearchFormPropsType) => {
+    // -----------  Formik hook  ------------------
     const {
         register,
         handleSubmit
     } = useForm<FormType>()
 
+    // ------------- Данные из form ---------------
     const onSubmit: SubmitHandler<FormType> = (data) => {
         // Преобразовали из строк в boolean и null
         const filter: UsersFilterType = {
             term: data.term,
             friends: data.friends === 'null' ? null : data.friends === 'true'
         }
-
         props.onFilterChanged(filter)
     }
 
