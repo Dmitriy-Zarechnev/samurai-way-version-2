@@ -11,11 +11,10 @@ import {Preloader} from '../../../common/preloader/Preloader'
 import {useHistory} from 'react-router-dom'
 import * as queryString from 'querystring'
 
-type QueryParamsType ={ term?: string, page?: string, friend?: string }
+type QueryParamsType = { term?: string, page?: string, friend?: string }
 
 
 export const UsersPage = () => {
-
     // Используем хук useSelector и получаем данные из state
     const items = useSelector(getUsersS)
     const currentPage = useSelector(getCurrentPageS)
@@ -30,11 +29,13 @@ export const UsersPage = () => {
     // Используем хук из react-router-dom
     const history = useHistory()
 
-    //  -------- Первая загрузка списка пользователей ----------------
+    //  -------- Загрузка списка пользователей ----------------
     useEffect(() => {
-        // Прочитали данные из URL
-        const parsed = queryString.parse(history.location.search.substr(1)) as QueryParamsType
+        // Прочитали данные из URL и обрезали "?" вначале строки
+        const parsed =
+            queryString.parse(history.location.search.substr(1)) as QueryParamsType
 
+        // Из объекта parsed берем данные и переприсваиваем
         let actualPage = currentPage
         if (!!parsed.page) actualPage = Number(parsed.page)
 
@@ -47,28 +48,28 @@ export const UsersPage = () => {
                 ? null
                 : parsed.friend === 'true'
         }
-
+        // Загрузка пользователей с актуальными данными
         dispatch(getUsers(actualPage, pageSize, actualFilter))
     }, [])
 
     // Синхронизируем URL адрес
     useEffect(() => {
-
+        // Создали объект и заполнили данными из URL если нужно
         const query: QueryParamsType = {}
         if (!!filter.term) query.term = filter.term
         if (filter.friends !== null) query.friend = String(filter.friends)
         if (currentPage !== 1) query.page = String(currentPage)
 
+
+        // Пушим данные в URL
         history.push({
             pathname: '/users',
-            search: queryString.stringify(query) //`?term=${filter.term}&friend=${filter.friends}&page=${currentPage}`
+            search: queryString.stringify(query)
+            /* Результат queryString.stringify(query)
+            `?term=${filter.term}&friend=${filter.friends}&page=${currentPage}` */
         })
 
     }, [filter, currentPage])
-
-
-
-
 
     //  -------- Изменение текущей страницы ----------------
     const onPageChanged = (currentPage: number) => {

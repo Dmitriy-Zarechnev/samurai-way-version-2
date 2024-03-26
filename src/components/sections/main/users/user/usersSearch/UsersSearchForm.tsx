@@ -10,6 +10,7 @@ import {getUsersFilterS} from '../../../../../../redux/selectors/users-selectors
 type UsersSearchFormPropsType = {
     onFilterChanged: (filter: UsersFilterType) => void
 }
+
 type FriendFormType = 'true' | 'false' | 'null'
 
 type FormType = {
@@ -49,10 +50,10 @@ export const UsersSearchForm = React.memo((props: UsersSearchFormPropsType) => {
                     addInputClass={S.inputFind}
                     addLabelClass={S.label}
                     defValue={filter.term}
-
                 />
 
-                <select defaultValue={String(filter.friends) as FriendFormType} {...register('friends')}>
+                <select defaultValue={String(filter.friends) as FriendFormType}
+                        {...register('friends')}>
                     <option value="null">All</option>
                     <option value="true">Only Followed</option>
                     <option value="false">Only Unfollowed</option>
