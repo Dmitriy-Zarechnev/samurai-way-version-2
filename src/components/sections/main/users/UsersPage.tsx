@@ -11,6 +11,8 @@ import {Preloader} from '../../../common/preloader/Preloader'
 import {useHistory} from 'react-router-dom'
 import * as queryString from 'querystring'
 
+type QueryParamsType ={ term?: string, page?: string, friend?: string }
+
 
 export const UsersPage = () => {
 
@@ -28,23 +30,44 @@ export const UsersPage = () => {
     // Используем хук из react-router-dom
     const history = useHistory()
 
-    // Синхронизируем URL адрес
-    // useEffect(() => {
-    //     history.push({
-    //         pathname: '/users',
-    //         search: `?term=${filter.term}&friend=${filter.friends}&page=${currentPage}`
-    //     })
-    //
-    // }, [filter, currentPage])
-
-
     //  -------- Первая загрузка списка пользователей ----------------
     useEffect(() => {
         // Прочитали данные из URL
-        const parsed = queryString.parse(history.location.search.substr(1))
+        const parsed = queryString.parse(history.location.search.substr(1)) as QueryParamsType
 
-        dispatch(getUsers(currentPage, pageSize, filter))
+        let actualPage = currentPage
+        if (!!parsed.page) actualPage = Number(parsed.page)
+
+        let actualFilter = filter
+        if (!!parsed.term) actualFilter = {...actualFilter, term: parsed.term as string}
+
+        if (!!parsed.friend) actualFilter = {
+            ...actualFilter,
+            friends: parsed.friend === 'null'
+                ? null
+                : parsed.friend === 'true'
+        }
+
+        dispatch(getUsers(actualPage, pageSize, actualFilter))
     }, [])
+
+    // Синхронизируем URL адрес
+    useEffect(() => {
+
+        const query: QueryParamsType = {}
+        if (!!filter.term) query.term = filter.term
+        if (filter.friends !== null) query.friend = String(filter.friends)
+        if (currentPage !== 1) query.page = String(currentPage)
+
+        history.push({
+            pathname: '/users',
+            search: queryString.stringify(query) //`?term=${filter.term}&friend=${filter.friends}&page=${currentPage}`
+        })
+
+    }, [filter, currentPage])
+
+
+
 
 
     //  -------- Изменение текущей страницы ----------------

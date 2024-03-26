@@ -4,23 +4,29 @@ import S from './UsersSearchForm.module.css'
 import {ProfileInputForm} from '../../../../../common/profileInputForm/ProfileInputForm'
 import {Button} from '../../../../../common/button/Button'
 import {UsersFilterType} from '../../../../../../redux/reducers/users-reducer'
+import {useSelector} from 'react-redux'
+import {getUsersFilterS} from '../../../../../../redux/selectors/users-selectors'
 
 type UsersSearchFormPropsType = {
     onFilterChanged: (filter: UsersFilterType) => void
 }
+type FriendFormType = 'true' | 'false' | 'null'
 
 type FormType = {
     term: string
-    friends: 'true' | 'false' | 'null'
+    friends: FriendFormType
 }
 
 
 export const UsersSearchForm = React.memo((props: UsersSearchFormPropsType) => {
-    // -----------  Formik hook  ------------------
+    // -----------  React-hook-form hook  ------------------
     const {
         register,
         handleSubmit
-    } = useForm<FormType>()
+    } = useForm<FormType>({shouldUnregister: true})
+
+    // Используем хук useSelector и получаем данные из state
+    const filter = useSelector(getUsersFilterS)
 
     // ------------- Данные из form ---------------
     const onSubmit: SubmitHandler<FormType> = (data) => {
@@ -42,9 +48,11 @@ export const UsersSearchForm = React.memo((props: UsersSearchFormPropsType) => {
                     name={'Users Search'}
                     addInputClass={S.inputFind}
                     addLabelClass={S.label}
+                    defValue={filter.term}
+
                 />
 
-                <select {...register('friends')}>
+                <select defaultValue={String(filter.friends) as FriendFormType} {...register('friends')}>
                     <option value="null">All</option>
                     <option value="true">Only Followed</option>
                     <option value="false">Only Unfollowed</option>
