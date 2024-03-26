@@ -18,6 +18,7 @@ export const User = React.memo((props: UserPropsType) => {
     //  Используем хук useDispatch и получаем dispatch
     const dispatch = useDispatch()
 
+
     // ----- Функция для подписки и отписки -------
     const onClickHandler = () => {
         props.user.followed

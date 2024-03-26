@@ -8,6 +8,8 @@ import {useDispatch, useSelector} from 'react-redux'
 import {getCurrentPageS, getIsFetchingS, getPageSizeS, getTotalCountS, getUsersFilterS, getUsersS} from '../../../../redux/selectors/users-selectors'
 import {onPaginationHelper} from '../../../../utils/pagination-helper'
 import {Preloader} from '../../../common/preloader/Preloader'
+import {useHistory} from 'react-router-dom'
+import * as queryString from 'querystring'
 
 
 export const UsersPage = () => {
@@ -23,9 +25,25 @@ export const UsersPage = () => {
     //  Используем хук useDispatch и получаем dispatch
     const dispatch = useDispatch()
 
+    // Используем хук из react-router-dom
+    const history = useHistory()
+
+    // Синхронизируем URL адрес
+    // useEffect(() => {
+    //     history.push({
+    //         pathname: '/users',
+    //         search: `?term=${filter.term}&friend=${filter.friends}&page=${currentPage}`
+    //     })
+    //
+    // }, [filter, currentPage])
+
+
     //  -------- Первая загрузка списка пользователей ----------------
     useEffect(() => {
-        dispatch(getUsers(1, pageSize, {term: '', friends: null}))
+        // Прочитали данные из URL
+        const parsed = queryString.parse(history.location.search.substr(1))
+
+        dispatch(getUsers(currentPage, pageSize, filter))
     }, [])
 
 
