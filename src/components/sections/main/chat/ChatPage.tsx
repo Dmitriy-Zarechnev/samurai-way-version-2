@@ -1,4 +1,16 @@
-import React from 'react'
+import React, {memo, useEffect, useState} from 'react'
+
+
+// WebSocket соединение
+const ws = new WebSocket('wss://social-network.samuraijs.com/handlers/ChatHandler.ashx')
+
+// Response Type
+export type ChatMessageType = {
+    message: string,
+    photo: string,
+    userId: number,
+    userName: string
+}
 
 export const ChatPage = () => {
     return (
@@ -10,6 +22,8 @@ export const ChatPage = () => {
 
 
 export const Chat = () => {
+
+
     return (
         <div>
             <ChatMessages/>
@@ -20,34 +34,40 @@ export const Chat = () => {
 
 
 export const ChatMessages = () => {
+    const [messages, setMessages] = useState<ChatMessageType[]>([])
 
-    const messages: Array<any> = [1, 2, 3, 4]
+    useEffect(() => {
+        ws.addEventListener('message', (e) => {
+            setMessages(JSON.parse(e.data))
+        })
+    }, [])
 
     return (
-        <div>
-            {messages.map(el => {
-                return <ChatMessage message={el}/>
+        <div style={{height: '800px', overflowY: 'auto'}}>
+            {messages.map((el, index) => {
+                return <ChatMessage key={index} message={el}/>
             })}
         </div>
     )
 }
 
-export const ChatMessage = (props: { message: string }) => {
+export const ChatMessage = memo((props: { message: ChatMessageType }) => {
 
-    const message = {
-        url: 'https://thumbs.dreamstime.com/b/%D1%83-%D0%B8%D1%82%D0%BA%D0%B0-%D0%BD%D0%B0%D1%80%D0%B8%D1%81%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%B0%D1%8F-%D1%80%D1%83%D0%BA%D0%BE%D0%B9-%D0%BC%D0%B8-%D0%B0%D1%8F-%D0%BC%D0%B0-%D0%B5%D0%BD%D1%8C%D0%BA%D0%B0%D1%8F-69658352.jpg',
-        name: 'Sam',
-        text: 'Hello Chat'
-    }
     return (
         <div>
-            <img src={message.url} alt={'message'}/>
-            <span>{message.name}</span>
-            <p>{message.text}</p>
+            <div>
+                <img style={{width: '30px', height: '30px'}}
+                     src={props.message.photo}
+                     alt={'message'}/>
+                <div>
+                    <span>{props.message.userName}</span>
+                </div>
+            </div>
+            <p>{props.message.message}</p>
             <hr/>
         </div>
     )
-}
+})
 
 export const ChatAddMessageForm = () => {
     return (
