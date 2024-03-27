@@ -5,6 +5,7 @@ import {UsersAPIComponentActionsType} from '../reducers/users-reducer'
 import {AppReducerActionsType} from '../reducers/app-reducer'
 import {ThunkAction, ThunkDispatch} from 'redux-thunk'
 import {AppRootState} from '../redux-store'
+import {ChatReducerActionsType} from '../reducers/chat-reducer'
 
 // Типизация всех actioncreators для типизации thunk
 export type CommonActionsTypeForApp =
@@ -12,7 +13,8 @@ export type CommonActionsTypeForApp =
     MyMessagesActionsType |
     MyPostsActionsType |
     UsersAPIComponentActionsType |
-    AppReducerActionsType
+    AppReducerActionsType |
+    ChatReducerActionsType
 
 // Типизация для thunk, позволяет диспатчить thunk
 export type ThunkType = ThunkAction<void, AppRootState, unknown, CommonActionsTypeForApp>

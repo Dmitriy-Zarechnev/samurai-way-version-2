@@ -6,15 +6,17 @@ import {usersReducer} from './reducers/users-reducer'
 import {authReducer} from './reducers/auth-reducer'
 import thunkMiddleware from 'redux-thunk'
 import {appReducer} from './reducers/app-reducer'
+import {chatReducer} from './reducers/chat-reducer'
 
-// Общий редьюсер для всего приложения
+// rootReducer для всего приложения
 const rootReducer = combineReducers({
     profilePage: profileReducer,
     messagesPage: messagesReducer,
     friendsListData: friendslistReducer,
     usersPage: usersReducer,
     auth: authReducer,
-    app: appReducer
+    app: appReducer,
+    chat:chatReducer
 })
 
 // Типизация всего STATE

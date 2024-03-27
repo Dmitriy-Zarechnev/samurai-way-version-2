@@ -1,13 +1,9 @@
 import React, {ChangeEvent, memo, useEffect, useState} from 'react'
+import {ChatMessageType} from '../../../../api/chat-api'
+import {useDispatch, useSelector} from 'react-redux'
+import {startChatMessagesListening, stopChatMessagesListening} from '../../../../redux/reducers/chat-reducer'
+import {chatMessagesSelector} from '../../../../redux/selectors/chat-selector'
 
-
-// WebSocket Message Response Type
-export type ChatMessageType = {
-    message: string,
-    photo: string,
-    userId: number,
-    userName: string
-}
 
 export const ChatPage = () => {
     return (
@@ -20,65 +16,79 @@ export const ChatPage = () => {
 
 export const Chat = () => {
     // Локальный state для WebSocket соединения
-    const [wsChannel, setWsChannel] = useState<WebSocket | null>(null)
+    // const [wsChannel, setWsChannel] = useState<WebSocket | null>(null)
+
+    //  Используем хук useDispatch и получаем dispatch
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        // Объявили WebSocket соединение
-        let ws: WebSocket
-
-        const closeEvent = () => {
-            /* Рекурсивно вызвали себя же, чтоб создать соединение снова
-            с определенным интервалом */
-            setTimeout(() => {
-                createChannel()
-            }, 3000)
-        }
-
-        // Функция для добавления WebSocket соединения
-        function createChannel() {
-            // Отписались от старого события перед новой подпиской
-            ws?.removeEventListener('close', closeEvent)
-            // Принудительно закрыли WebSocket соединение перед новой подпиской
-            ws?.close()
-
-
-            // Инициализация нового WebSocket соединения
-            ws = new WebSocket('wss://social-network.samuraijs.com/handlers/ChatHandler.ashx')
-
-            // Подписка на событие потери соединения
-            ws.addEventListener('close', closeEvent)
-
-            // Заменили значение в локальном state
-            setWsChannel(ws)
-        }
-
-        // Вызвали функцию для добавления WebSocket соединения
-        createChannel()
-
+        // Начало открытия канала после монтирования компоненты
+        dispatch(startChatMessagesListening())
 
         return () => {
-            // Отписались от событий перед уходом со страницы
-            ws.removeEventListener('close', closeEvent)
-
-            // Принудительно закрыли WebSocket соединение
-            ws.close()
+            // Закрытие канала перед размонтированием компоненты
+            dispatch(stopChatMessagesListening())
         }
     }, [])
+
+    // useEffect(() => {
+    // Объявили WebSocket соединение
+    //let ws: WebSocket
+    //const closeEvent = () => {
+    /* Рекурсивно вызвали себя же, чтоб создать соединение снова
+    с определенным интервалом */
+    //setTimeout(() => {
+    //  createChannel()
+    //}, 3000)
+    //  }
+
+    // Функция для добавления WebSocket соединения
+    // function createChannel() {
+    //     // Отписались от старого события перед новой подпиской
+    //     ws?.removeEventListener('close', closeEvent)
+    //     // Принудительно закрыли WebSocket соединение перед новой подпиской
+    //     ws?.close()
+    //
+    //
+    //     // Инициализация нового WebSocket соединения
+    //     ws = new WebSocket('wss://social-network.samuraijs.com/handlers/ChatHandler.ashx')
+    //
+    //     // Подписка на событие потери соединения
+    //     ws.addEventListener('close', closeEvent)
+    //
+    //     // Заменили значение в локальном state
+    //     setWsChannel(ws)
+    // }
+
+    // Вызвали функцию для добавления WebSocket соединения
+    //createChannel()
+
+
+    // return () => {
+    //     // Отписались от событий перед уходом со страницы
+    //     ws.removeEventListener('close', closeEvent)
+    //
+    //     // Принудительно закрыли WebSocket соединение
+    //     ws.close()
+    // }
+    //}, [])
 
 
     return (
         <div>
-            <ChatMessages wsChannel={wsChannel}/>
-            <ChatAddMessageForm wsChannel={wsChannel}/>
+            <ChatMessages/>
+            <ChatAddMessageForm/>
         </div>
     )
 }
 
 
-export const ChatMessages = memo((props: { wsChannel: WebSocket | null }) => {
+export const ChatMessages = () => {
     // Локальный state для добавления сообщений с сервера
-    const [messages, setMessages] = useState<ChatMessageType[]>([])
+    // const [messages, setMessages] = useState<ChatMessageType[]>([])
 
+    // Используем хук useSelector и получаем данные из state
+    const messages = useSelector(chatMessagesSelector)
 
     useEffect(() => {
         // Функция для обработчика события
@@ -102,7 +112,7 @@ export const ChatMessages = memo((props: { wsChannel: WebSocket | null }) => {
             })}
         </div>
     )
-})
+}
 
 export const ChatMessage = memo((props: { message: ChatMessageType }) => {
 
@@ -122,55 +132,54 @@ export const ChatMessage = memo((props: { message: ChatMessageType }) => {
     )
 })
 
-export const ChatAddMessageForm =
-    memo((props: { wsChannel: WebSocket | null }) => {
-        // Локальный state для отправки своих сообщений
-        const [message, setMessage] = useState<string>('')
-        // Локальный state для статуса websocket канала
-        const [readyStatus, setReadyStatus] = useState<'pending' | 'ready'>('pending')
+export const ChatAddMessageForm = () => {
+    // Локальный state для отправки своих сообщений
+    const [message, setMessage] = useState<string>('')
+    // Локальный state для статуса websocket канала
+    const [readyStatus, setReadyStatus] = useState<'pending' | 'ready'>('pending')
 
-        useEffect(() => {
-            // Функция для обработчика
-            const openEvent = () => {
-                setReadyStatus('ready')
-            }
-
-            // Подписались на изменение состояния канала
-            props.wsChannel?.addEventListener('open', openEvent)
-
-            // Удалили обработчик после ухода с компоненты
-            return () => {
-                props.wsChannel?.removeEventListener('open', openEvent)
-            }
-        }, [props.wsChannel])
-
-        // ------ Функция для отправки сообщения -------
-        const sendMessage = () => {
-            // Проверили наличие сообщения
-            if (!message) {
-                return
-            }
-            // Отправили сообщение через websocket канал
-            props.wsChannel?.send(message)
-            // Очистили state сообщения
-            setMessage('')
+    useEffect(() => {
+        // Функция для обработчика
+        const openEvent = () => {
+            setReadyStatus('ready')
         }
 
+        // Подписались на изменение состояния канала
+        props.wsChannel?.addEventListener('open', openEvent)
 
-        // ------ Функция для textarea -------
-        const textAreaOnChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
-            setMessage(e.currentTarget.value)
+        // Удалили обработчик после ухода с компоненты
+        return () => {
+            props.wsChannel?.removeEventListener('open', openEvent)
         }
+    }, [props.wsChannel])
+
+    // ------ Функция для отправки сообщения -------
+    const sendMessage = () => {
+        // Проверили наличие сообщения
+        if (!message) {
+            return
+        }
+        // Отправили сообщение через websocket канал
+        props.wsChannel?.send(message)
+        // Очистили state сообщения
+        setMessage('')
+    }
 
 
-        // ------ Выражение для disable кнопки -------
-        const disableButton = props.wsChannel === null || readyStatus !== 'ready'
+    // ------ Функция для textarea -------
+    const textAreaOnChangeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        setMessage(e.currentTarget.value)
+    }
 
-        return (
-            <div>
-                <textarea onChange={textAreaOnChangeHandler} value={message}></textarea>
-                <button disabled={disableButton} onClick={sendMessage}>Send</button>
-            </div>
-        )
-    })
+
+    // ------ Выражение для disable кнопки -------
+    const disableButton = props.wsChannel === null || readyStatus !== 'ready'
+
+    return (
+        <div>
+            <textarea onChange={textAreaOnChangeHandler} value={message}></textarea>
+            <button disabled={disableButton} onClick={sendMessage}>Send</button>
+        </div>
+    )
+}
 
