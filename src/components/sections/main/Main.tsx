@@ -9,6 +9,7 @@ import {Profile} from './profile/Profile'
 import {StartPage} from '../../common/startPage/StartPage'
 import {UsersPage} from './users/UsersPage'
 import {LogInPage} from './logIn/LogInPage'
+import {ChatPage} from './chat/ChatPage'
 
 
 export const Main = React.memo(() => {
@@ -24,6 +25,9 @@ export const Main = React.memo(() => {
 
             <Route path="/messages" render={() =>
                 <Messages/>}/>
+
+            <Route path="/chat" render={() =>
+                <ChatPage/>}/>
 
             <Route path="/news" render={() => <News/>}/>
             <Route path="/music" render={() => <Music/>}/>

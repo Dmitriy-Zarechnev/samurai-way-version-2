@@ -8,6 +8,7 @@ export const NavbarLeft = React.memo(() => {
             <ul>
                 <li className={S.navbar_Left__item}><NavLink to={'/profile'} activeClassName={S.active}>Profile</NavLink></li>
                 <li className={S.navbar_Left__item}><NavLink to={'/messages'} activeClassName={S.active}>Messages</NavLink></li>
+                <li className={S.navbar_Left__item}><NavLink to={'/chat'} activeClassName={S.active}>Chat</NavLink></li>
                 <li className={S.navbar_Left__item}><NavLink to={'/news'} activeClassName={S.active}>News</NavLink></li>
                 <li className={S.navbar_Left__item}><NavLink to={'/music'} activeClassName={S.active}>Music</NavLink></li>
                 <li className={S.navbar_Left__item}><NavLink to={'/users'} activeClassName={S.active}>Users</NavLink></li>
