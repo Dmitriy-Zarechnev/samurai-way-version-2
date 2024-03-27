@@ -1,7 +1,7 @@
 import React, {ChangeEvent, memo, useEffect, useState} from 'react'
 import {ChatMessageType} from '../../../../api/chat-api'
 import {useDispatch, useSelector} from 'react-redux'
-import {startChatMessagesListening, stopChatMessagesListening} from '../../../../redux/reducers/chat-reducer'
+import {sendChatMessage, startChatMessagesListening, stopChatMessagesListening} from '../../../../redux/reducers/chat-reducer'
 import {chatMessagesSelector} from '../../../../redux/selectors/chat-selector'
 
 
@@ -89,21 +89,23 @@ export const ChatMessages = () => {
 
     // Используем хук useSelector и получаем данные из state
     const messages = useSelector(chatMessagesSelector)
+    /*
+        useEffect(() => {
+            // Функция для обработчика события
+            const messageEvent = (e: MessageEvent) => {
+                setMessages((prevMessages) => [...prevMessages, ...JSON.parse(e.data)])
+            }
 
-    useEffect(() => {
-        // Функция для обработчика события
-        const messageEvent = (e: MessageEvent) => {
-            setMessages((prevMessages) => [...prevMessages, ...JSON.parse(e.data)])
-        }
+            // Подписались на новое | новые сообщение с сервера
+            props.wsChannel?.addEventListener('message', messageEvent)
 
-        // Подписались на новое | новые сообщение с сервера
-        props.wsChannel?.addEventListener('message', messageEvent)
+            // Удалили обработчик после ухода с компоненты
+            return () => {
+                props.wsChannel?.removeEventListener('message', messageEvent)
+            }
+        }, [props.wsChannel])
 
-        // Удалили обработчик после ухода с компоненты
-        return () => {
-            props.wsChannel?.removeEventListener('message', messageEvent)
-        }
-    }, [props.wsChannel])
+     */
 
     return (
         <div style={{height: '800px', overflowY: 'auto'}}>
@@ -138,29 +140,33 @@ export const ChatAddMessageForm = () => {
     // Локальный state для статуса websocket канала
     const [readyStatus, setReadyStatus] = useState<'pending' | 'ready'>('pending')
 
-    useEffect(() => {
-        // Функция для обработчика
-        const openEvent = () => {
-            setReadyStatus('ready')
-        }
+    //  Используем хук useDispatch и получаем dispatch
+    const dispatch = useDispatch()
 
-        // Подписались на изменение состояния канала
-        props.wsChannel?.addEventListener('open', openEvent)
+    /*
+        useEffect(() => {
+            // Функция для обработчика
+            const openEvent = () => {
+                setReadyStatus('ready')
+            }
 
-        // Удалили обработчик после ухода с компоненты
-        return () => {
-            props.wsChannel?.removeEventListener('open', openEvent)
-        }
-    }, [props.wsChannel])
+            // Подписались на изменение состояния канала
+            props.wsChannel?.addEventListener('open', openEvent)
 
+            // Удалили обработчик после ухода с компоненты
+            return () => {
+                props.wsChannel?.removeEventListener('open', openEvent)
+            }
+        }, [props.wsChannel])
+     */
     // ------ Функция для отправки сообщения -------
-    const sendMessage = () => {
+    const sendMessageHandler = () => {
         // Проверили наличие сообщения
         if (!message) {
             return
         }
         // Отправили сообщение через websocket канал
-        props.wsChannel?.send(message)
+        dispatch(sendChatMessage(message))
         // Очистили state сообщения
         setMessage('')
     }
@@ -173,12 +179,12 @@ export const ChatAddMessageForm = () => {
 
 
     // ------ Выражение для disable кнопки -------
-    const disableButton = props.wsChannel === null || readyStatus !== 'ready'
+    //const disableButton = props.wsChannel === null || readyStatus !== 'ready'
 
     return (
         <div>
             <textarea onChange={textAreaOnChangeHandler} value={message}></textarea>
-            <button disabled={disableButton} onClick={sendMessage}>Send</button>
+            <button disabled={false} onClick={sendMessageHandler}>Send</button>
         </div>
     )
 }

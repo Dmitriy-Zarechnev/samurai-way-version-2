@@ -14,7 +14,7 @@ let subscribers: SubscriberType[] = []
 
 // -------------------- Управление WebSocket -----------------------
 // Объявили WebSocket соединение
-let ws: WebSocket
+let ws: WebSocket | null = null
 
 // Функция для обработчика события
 const closeEvent = () => {
@@ -45,7 +45,10 @@ function createChannel() {
     ws = new WebSocket('wss://social-network.samuraijs.com/handlers/ChatHandler.ashx')
     // Подписка на событие потери соединения
     ws.addEventListener('close', closeEvent)
+    // Подписка на событие 'message'
+    ws.addEventListener('message', messageEventHandler)
 }
+
 
 // ---------------------------------------------------------------
 
@@ -62,5 +65,27 @@ export const chatAPI = {
     // Отписка от сообщений в стиле pussy
     unsubscribe(callback: SubscriberType) {
         subscribers = subscribers.filter(el => el !== callback)
+    },
+
+    // Отправка сообщения
+    sendChatMessage(message: string) {
+        ws?.send(message)
+    },
+
+    // Добавили WebSocket соединение
+    start() {
+        createChannel()
+    },
+
+    // Удалили WebSocket соединение
+    stop() {
+        // Перезатерли всех подписчиков
+        subscribers = []
+        // Отписка от события потери соединения
+        ws?.removeEventListener('close', closeEvent)
+        // Отписка от события 'message'
+        ws?.removeEventListener('message', messageEventHandler)
+        // Принудительно закрыли WebSocket соединение перед новой подпиской
+        ws?.close()
     }
 }

@@ -63,6 +63,8 @@ const newChatMessagesHandler = (dispatch: ThunkDispatchType) => {
 
 //  -------- Начинаем следить за изменением сообщений ----------------
 export const startChatMessagesListening = () => async (dispatch: ThunkDispatchType) => {
+    // Создали WebSocket соединение
+    chatAPI.start()
     // Подписались на изменения чата
     chatAPI.subscribe(newChatMessagesHandler(dispatch))
 }
@@ -72,4 +74,12 @@ export const startChatMessagesListening = () => async (dispatch: ThunkDispatchTy
 export const stopChatMessagesListening = () => async (dispatch: ThunkDispatchType) => {
     // Отписались от изменений чата
     chatAPI.unsubscribe(newChatMessagesHandler(dispatch))
+    // Удалили WebSocket соединение
+    chatAPI.stop()
+}
+
+//  -------- Отправка сообщений в чат ----------------
+export const sendChatMessage = (message: string) => async (dispatch: ThunkDispatchType) => {
+    // Отправили сообщение
+    chatAPI.sendChatMessage(message)
 }
