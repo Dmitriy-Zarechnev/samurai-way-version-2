@@ -2,7 +2,7 @@ import React, {ChangeEvent, memo, useEffect, useState} from 'react'
 import {ChatMessageType} from '../../../../api/chat-api'
 import {useDispatch, useSelector} from 'react-redux'
 import {sendChatMessage, startChatMessagesListening, stopChatMessagesListening} from '../../../../redux/reducers/chat-reducer'
-import {chatMessagesSelector} from '../../../../redux/selectors/chat-selector'
+import {chatMessagesSelector, chatStatusSelector} from '../../../../redux/selectors/chat-selector'
 
 
 export const ChatPage = () => {
@@ -138,7 +138,11 @@ export const ChatAddMessageForm = () => {
     // Локальный state для отправки своих сообщений
     const [message, setMessage] = useState<string>('')
     // Локальный state для статуса websocket канала
-    const [readyStatus, setReadyStatus] = useState<'pending' | 'ready'>('pending')
+    // const [readyStatus, setReadyStatus] = useState<'pending' | 'ready'>('pending')
+
+
+    // Используем хук useSelector и получаем данные из state
+    const status = useSelector(chatStatusSelector)
 
     //  Используем хук useDispatch и получаем dispatch
     const dispatch = useDispatch()
@@ -177,14 +181,14 @@ export const ChatAddMessageForm = () => {
         setMessage(e.currentTarget.value)
     }
 
-
-    // ------ Выражение для disable кнопки -------
-    //const disableButton = props.wsChannel === null || readyStatus !== 'ready'
-
     return (
         <div>
-            <textarea onChange={textAreaOnChangeHandler} value={message}></textarea>
-            <button disabled={false} onClick={sendMessageHandler}>Send</button>
+            <textarea onChange={textAreaOnChangeHandler}
+                      value={message}/>
+            <button disabled={status !== 'ready'}
+                    onClick={sendMessageHandler}>
+                Send
+            </button>
         </div>
     )
 }

@@ -1,4 +1,6 @@
 // WebSocket Message Response Type
+import {ChatStatusType} from '../redux/reducers/chat-reducer'
+
 export type ChatMessageType = {
     message: string,
     photo: string,
@@ -6,11 +8,26 @@ export type ChatMessageType = {
     userName: string
 }
 
-// Типизация подписчика
-type SubscriberType = (messages: ChatMessageType[]) => void
+// Типизация подписчика для 'message-received'
+type MessagesReceivedSubscriberType = (messages: ChatMessageType[]) => void
+
+// Типизация подписчика для 'status-changed'
+type StatusChangedSubscriberType = (status: ChatStatusType) => void
+
+// Типизация событий
+export type EventsNameType = 'message-received' | 'status-changed'
+
+// Типизация subscribers
+type SubscribersType = {
+    'message-received': MessagesReceivedSubscriberType[],
+    'status-changed': StatusChangedSubscriberType[]
+}
 
 // Массив подписчиков
-let subscribers: SubscriberType[] = []
+let subscribers: SubscribersType = {
+    'message-received': [],
+    'status-changed': []
+}
 
 // -------------------- Управление WebSocket -----------------------
 // Объявили WebSocket соединение
@@ -30,13 +47,20 @@ const messageEventHandler = (e: MessageEvent) => {
     // Разпарсили ответ от сервера
     const newMessages = JSON.parse(e.data)
     // Добавили ребят с сервера
-    subscribers.forEach(el => el(newMessages))
+    subscribers['message-received'].forEach(el => el(newMessages))
 }
 
-// Функция для добавления WebSocket соединения
-function createChannel() {
+// Функция зачистки / отписки от событий
+const cleanUp = () => {
     // Отписались от старого события перед новой подпиской
     ws?.removeEventListener('close', closeEvent)
+    // Отписка от события 'message'
+    ws?.removeEventListener('message', messageEventHandler)
+}
+
+// ------ Функция для добавления WebSocket соединения ------
+function createChannel() {
+    cleanUp()
     // Принудительно закрыли WebSocket соединение перед новой подпиской
     ws?.close()
 
@@ -54,17 +78,20 @@ function createChannel() {
 
 export const chatAPI = {
     // Подписка на изменение сообщений
-    subscribe(callback: SubscriberType) {
-        subscribers.push(callback)
+    subscribe(eventName: EventsNameType, callback: MessagesReceivedSubscriberType | StatusChangedSubscriberType) {
+        // @ts-ignore
+        subscribers[eventName].push(callback)
         // Отписка в стиле Redux
         return () => {
-            subscribers = subscribers.filter(el => el !== callback)
+            // @ts-ignore
+            subscribers[eventName] = subscribers[eventName].filter(el => el !== callback)
         }
     },
 
     // Отписка от сообщений в стиле pussy
-    unsubscribe(callback: SubscriberType) {
-        subscribers = subscribers.filter(el => el !== callback)
+    unsubscribe(eventName: EventsNameType, callback: MessagesReceivedSubscriberType | StatusChangedSubscriberType) {
+        // @ts-ignore
+        subscribers[eventName] = subscribers[eventName].filter(el => el !== callback)
     },
 
     // Отправка сообщения
@@ -80,11 +107,9 @@ export const chatAPI = {
     // Удалили WebSocket соединение
     stop() {
         // Перезатерли всех подписчиков
-        subscribers = []
-        // Отписка от события потери соединения
-        ws?.removeEventListener('close', closeEvent)
-        // Отписка от события 'message'
-        ws?.removeEventListener('message', messageEventHandler)
+        subscribers['message-received'] = []
+        subscribers['status-changed'] = []
+        cleanUp()
         // Принудительно закрыли WebSocket соединение перед новой подпиской
         ws?.close()
     }

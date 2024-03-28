@@ -4,20 +4,25 @@ import {ThunkDispatchType} from '../types/Types'
 
 // Типизация Actions
 export type ChatReducerActionsType =
-    ReturnType<typeof chatMessagesReceived>
+    ReturnType<typeof chatMessagesReceived> |
+    ReturnType<typeof chatStatusChanged>
 
 
 // Типизация InitialState
 type ChatPageInitialState = typeof chatInitialState
 
+// Типизация Status
+export type ChatStatusType = 'pending' | 'ready'
 
 // *********** Константы названий actions ****************
 const CHAT_MESSAGES_RECEIVED = '/chat/CHAT-MESSAGES-RECEIVED'
+const CHAT_STATUS_CHANGED = '/chat/CHAT-STATUS-CHANGED'
 
 
 // *********** Первоначальный state для chatReducer ****************
 const chatInitialState = {
-    messages: [] as ChatMessageType[]
+    messages: [] as ChatMessageType[],
+    status: 'pending' as ChatStatusType
 }
 
 
@@ -31,6 +36,12 @@ export const chatReducer = (state: ChatPageInitialState = chatInitialState, acti
                     ...state.messages,
                     ...action.payload.messages]
             }
+
+        case CHAT_STATUS_CHANGED:
+            return {
+                ...state,
+                status: action.payload.status
+            }
         default:
             return state
     }
@@ -40,6 +51,9 @@ export const chatReducer = (state: ChatPageInitialState = chatInitialState, acti
 // *********** Action creators - создают объект action ****************
 export const chatMessagesReceived = (messages: ChatMessageType[]) => {
     return {type: CHAT_MESSAGES_RECEIVED, payload: {messages}} as const
+}
+export const chatStatusChanged = (status: ChatStatusType) => {
+    return {type: CHAT_STATUS_CHANGED, payload: {status}} as const
 }
 
 
@@ -66,7 +80,7 @@ export const startChatMessagesListening = () => async (dispatch: ThunkDispatchTy
     // Создали WebSocket соединение
     chatAPI.start()
     // Подписались на изменения чата
-    chatAPI.subscribe(newChatMessagesHandler(dispatch))
+    chatAPI.subscribe('message',newChatMessagesHandler(dispatch))
 }
 
 
