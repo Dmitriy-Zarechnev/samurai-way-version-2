@@ -1,5 +1,5 @@
 import React, {ChangeEvent, memo, UIEvent, useEffect, useRef, useState} from 'react'
-import {ChatMessageType} from '../../../../api/chat-api'
+import {ChatMessageAPIType} from '../../../../api/chat-api'
 import {useDispatch, useSelector} from 'react-redux'
 import {sendChatMessage, startChatMessagesListening, stopChatMessagesListening} from '../../../../redux/reducers/chat-reducer'
 import {chatMessagesSelector, chatStatusSelector} from '../../../../redux/selectors/chat-selector'
@@ -15,8 +15,6 @@ export const ChatPage = () => {
 
 
 export const Chat = () => {
-    // Локальный state для WebSocket соединения
-    // const [wsChannel, setWsChannel] = useState<WebSocket | null>(null)
 
     // Используем хук useSelector и получаем данные из state
     const status = useSelector(chatStatusSelector)
@@ -34,52 +32,9 @@ export const Chat = () => {
         }
     }, [])
 
-    // useEffect(() => {
-    // Объявили WebSocket соединение
-    //let ws: WebSocket
-    //const closeEvent = () => {
-    /* Рекурсивно вызвали себя же, чтоб создать соединение снова
-    с определенным интервалом */
-    //setTimeout(() => {
-    //  createChannel()
-    //}, 3000)
-    //  }
-
-    // Функция для добавления WebSocket соединения
-    // function createChannel() {
-    //     // Отписались от старого события перед новой подпиской
-    //     ws?.removeEventListener('close', closeEvent)
-    //     // Принудительно закрыли WebSocket соединение перед новой подпиской
-    //     ws?.close()
-    //
-    //
-    //     // Инициализация нового WebSocket соединения
-    //     ws = new WebSocket('wss://social-network.samuraijs.com/handlers/ChatHandler.ashx')
-    //
-    //     // Подписка на событие потери соединения
-    //     ws.addEventListener('close', closeEvent)
-    //
-    //     // Заменили значение в локальном state
-    //     setWsChannel(ws)
-    // }
-
-    // Вызвали функцию для добавления WebSocket соединения
-    //createChannel()
-
-
-    // return () => {
-    //     // Отписались от событий перед уходом со страницы
-    //     ws.removeEventListener('close', closeEvent)
-    //
-    //     // Принудительно закрыли WebSocket соединение
-    //     ws.close()
-    // }
-    //}, [])
-
-
     return (
         <div>
-            {status === 'error' && <div>Some Error Occured! Please Refresh Page</div>}
+            {status === 'error' && <div>Some Error Occurred! Please Refresh Page</div>}
             <ChatMessages/>
             <ChatAddMessageForm/>
         </div>
@@ -88,13 +43,13 @@ export const Chat = () => {
 
 
 export const ChatMessages = () => {
-    // Локальный state для добавления сообщений с сервера
-    // const [messages, setMessages] = useState<ChatMessageType[]>([])
 
     // Используем хук useSelector и получаем данные из state
     const messages = useSelector(chatMessagesSelector)
+
     // Обратились напрямую к div элементу, чтоб сделать scroll
     const messagesAnchorRef = useRef<HTMLDivElement>(null)
+
     // Локальный state для управления AutoScroll
     const [isAutoScroll, setIsAutoScroll] = useState(true)
 
@@ -106,27 +61,10 @@ export const ChatMessages = () => {
     }, [messages])
 
 
-    /*
-        useEffect(() => {
-            // Функция для обработчика события
-            const messageEvent = (e: MessageEvent) => {
-                setMessages((prevMessages) => [...prevMessages, ...JSON.parse(e.data)])
-            }
-
-            // Подписались на новое | новые сообщение с сервера
-            props.wsChannel?.addEventListener('message', messageEvent)
-
-            // Удалили обработчик после ухода с компоненты
-            return () => {
-                props.wsChannel?.removeEventListener('message', messageEvent)
-            }
-        }, [props.wsChannel])
-     */
-
     // ------ Функция для обработки scroll -------
     const scrollHandler = (e: UIEvent<HTMLDivElement>) => {
         let element = e.currentTarget
-        // Скролим нашу страницу
+        // Скроллим нашу страницу
         if (element.scrollHeight - element.scrollTop === element.clientHeight) {
             // Дошли до конца и включили autoScroll
             !isAutoScroll && setIsAutoScroll(true)
@@ -138,15 +76,17 @@ export const ChatMessages = () => {
 
     return (
         <div style={{height: '800px', overflowY: 'auto'}} onScroll={scrollHandler}>
-            {messages.map((el, index) => {
-                return <ChatMessage key={index} message={el}/>
+            {messages.map(el => {
+                return <ChatMessage key={el.id} message={el}/>
             })}
             <div ref={messagesAnchorRef}></div>
         </div>
     )
 }
 
-export const ChatMessage = memo((props: { message: ChatMessageType }) => {
+
+
+export const ChatMessage = memo((props: { message: ChatMessageAPIType }) => {
 
     return (
         <div>
@@ -164,12 +104,11 @@ export const ChatMessage = memo((props: { message: ChatMessageType }) => {
     )
 })
 
+
+
 export const ChatAddMessageForm = () => {
     // Локальный state для отправки своих сообщений
     const [message, setMessage] = useState('')
-    // Локальный state для статуса websocket канала
-    // const [readyStatus, setReadyStatus] = useState<'pending' | 'ready'>('pending')
-
 
     // Используем хук useSelector и получаем данные из state
     const status = useSelector(chatStatusSelector)
@@ -177,22 +116,7 @@ export const ChatAddMessageForm = () => {
     //  Используем хук useDispatch и получаем dispatch
     const dispatch = useDispatch()
 
-    /*
-        useEffect(() => {
-            // Функция для обработчика
-            const openEvent = () => {
-                setReadyStatus('ready')
-            }
 
-            // Подписались на изменение состояния канала
-            props.wsChannel?.addEventListener('open', openEvent)
-
-            // Удалили обработчик после ухода с компоненты
-            return () => {
-                props.wsChannel?.removeEventListener('open', openEvent)
-            }
-        }, [props.wsChannel])
-     */
     // ------ Функция для отправки сообщения -------
     const sendMessageHandler = () => {
         // Проверили наличие сообщения

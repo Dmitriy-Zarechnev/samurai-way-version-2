@@ -1,8 +1,7 @@
 import {AppRootState} from '../redux-store'
-import {ChatMessageType} from '../../api/chat-api'
-import {ChatStatusType} from '../reducers/chat-reducer'
+import {ChatMessagesType, ChatStatusType} from '../reducers/chat-reducer'
 
-export const chatMessagesSelector = (state: AppRootState): ChatMessageType[] => {
+export const chatMessagesSelector = (state: AppRootState): ChatMessagesType[] => {
     return state.chat.messages
 }
 export const chatStatusSelector = (state: AppRootState): ChatStatusType => {

@@ -1,5 +1,6 @@
-import {chatAPI, ChatMessageType} from '../../api/chat-api'
+import {chatAPI, ChatMessageAPIType} from '../../api/chat-api'
 import {ThunkDispatchType} from '../types/Types'
+import {v1} from 'uuid'
 
 
 // Типизация Actions
@@ -14,6 +15,9 @@ type ChatPageInitialState = typeof chatInitialState
 // Типизация Status
 export type ChatStatusType = 'pending' | 'ready' | 'error'
 
+// Типизация messages с добавленным id
+export type ChatMessagesType = ChatMessageAPIType & { id: string }
+
 // *********** Константы названий actions ****************
 const CHAT_MESSAGES_RECEIVED = '/chat/CHAT-MESSAGES-RECEIVED'
 const CHAT_STATUS_CHANGED = '/chat/CHAT-STATUS-CHANGED'
@@ -21,7 +25,7 @@ const CHAT_STATUS_CHANGED = '/chat/CHAT-STATUS-CHANGED'
 
 // *********** Первоначальный state для chatReducer ****************
 const chatInitialState = {
-    messages: [] as ChatMessageType[],
+    messages: [] as ChatMessagesType[],
     status: 'pending' as ChatStatusType
 }
 
@@ -34,7 +38,10 @@ export const chatReducer = (state: ChatPageInitialState = chatInitialState, acti
                 ...state,
                 messages: [
                     ...state.messages,
-                    ...action.payload.messages]
+                    ...action.payload.messages
+                        .map(el => ({...el, id: v1()}))
+                ]
+                    .filter((_, i, arr) => i >= arr.length - 100)
             }
 
         case CHAT_STATUS_CHANGED:
@@ -49,7 +56,7 @@ export const chatReducer = (state: ChatPageInitialState = chatInitialState, acti
 
 
 // *********** Action creators - создают объект action ****************
-export const chatMessagesReceived = (messages: ChatMessageType[]) => {
+export const chatMessagesReceived = (messages: ChatMessageAPIType[]) => {
     return {type: CHAT_MESSAGES_RECEIVED, payload: {messages}} as const
 }
 export const chatStatusChanged = (status: ChatStatusType) => {
@@ -57,11 +64,9 @@ export const chatStatusChanged = (status: ChatStatusType) => {
 }
 
 
-// *********** Thunk - необходимые для общения с DAL ****************
-
 
 // Создали универсальную приватную функцию для messages
-let _newChatMessagesHandler: ((messages: ChatMessageType[]) => void) | null = null
+let _newChatMessagesHandler: ((messages: ChatMessageAPIType[]) => void) | null = null
 // Функция, которая позволяет менять или использовать _newChatMessagesHandler
 const newChatMessagesHandler = (dispatch: ThunkDispatchType) => {
     // Если универсальная приватная функция не существует
@@ -88,9 +93,7 @@ const chatStatusHandlerCreator = (dispatch: ThunkDispatchType) => {
     return _chatStatusChangedHandler
 }
 
-
-
-
+// *********** Thunk - необходимые для общения с DAL ****************
 //  -------- Начинаем следить за изменением сообщений ----------------
 export const startChatMessagesListening = () => async (dispatch: ThunkDispatchType) => {
     // Создали WebSocket соединение

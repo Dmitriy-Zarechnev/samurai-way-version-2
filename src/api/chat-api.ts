@@ -1,7 +1,8 @@
-// WebSocket Message Response Type
 import {ChatStatusType} from '../redux/reducers/chat-reducer'
 
-export type ChatMessageType = {
+
+// WebSocket Message Response Type
+export type ChatMessageAPIType = {
     message: string,
     photo: string,
     userId: number,
@@ -9,7 +10,7 @@ export type ChatMessageType = {
 }
 
 // Типизация подписчика для 'message-received'
-type MessagesReceivedSubscriberType = (messages: ChatMessageType[]) => void
+type MessagesReceivedSubscriberType = (messages: ChatMessageAPIType[]) => void
 
 // Типизация подписчика для 'status-changed'
 type StatusChangedSubscriberType = (status: ChatStatusType) => void
