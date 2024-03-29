@@ -60,9 +60,8 @@ export const chatStatusChanged = (status: ChatStatusType) => {
 // *********** Thunk - необходимые для общения с DAL ****************
 
 
-// Создали универсальную приватную функцию
+// Создали универсальную приватную функцию для messages
 let _newChatMessagesHandler: ((messages: ChatMessageType[]) => void) | null = null
-
 // Функция, которая позволяет менять или использовать _newChatMessagesHandler
 const newChatMessagesHandler = (dispatch: ThunkDispatchType) => {
     // Если универсальная приватная функция не существует
@@ -75,19 +74,40 @@ const newChatMessagesHandler = (dispatch: ThunkDispatchType) => {
     return _newChatMessagesHandler
 }
 
+// Создали универсальную приватную функцию для status
+let _chatStatusChangedHandler: ((status: ChatStatusType) => void) | null = null
+// Функция, которая позволяет менять или использовать _chatStatusChangedHandler
+const chatStatusHandlerCreator = (dispatch: ThunkDispatchType) => {
+    // Если универсальная приватная функция не существует
+    if (_chatStatusChangedHandler === null) {
+        // Мы её инициализируем и делаем dispatch
+        _chatStatusChangedHandler = (status) => {
+            dispatch(chatStatusChanged(status))
+        }
+    }
+    return _chatStatusChangedHandler
+}
+
+
+
+
 //  -------- Начинаем следить за изменением сообщений ----------------
 export const startChatMessagesListening = () => async (dispatch: ThunkDispatchType) => {
     // Создали WebSocket соединение
     chatAPI.start()
     // Подписались на изменения чата
-    chatAPI.subscribe('message',newChatMessagesHandler(dispatch))
+    chatAPI.subscribe('message-received', newChatMessagesHandler(dispatch))
+    // Подписались на изменения статуса
+    chatAPI.subscribe('status-changed', chatStatusHandlerCreator(dispatch))
 }
 
 
 //  -------- Прекращаем следить за изменением сообщений ----------------
 export const stopChatMessagesListening = () => async (dispatch: ThunkDispatchType) => {
     // Отписались от изменений чата
-    chatAPI.unsubscribe(newChatMessagesHandler(dispatch))
+    chatAPI.unsubscribe('message-received', newChatMessagesHandler(dispatch))
+    // Отписались от изменения статуса
+    chatAPI.unsubscribe('status-changed', chatStatusHandlerCreator(dispatch))
     // Удалили WebSocket соединение
     chatAPI.stop()
 }

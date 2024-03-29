@@ -35,6 +35,8 @@ let ws: WebSocket | null = null
 
 // Функция для обработчика события
 const closeEvent = () => {
+    // Уведомляем подписчиков 'status-changed' об изменении статуса
+    notifySubscribesAboutStatus('pending')
     /* Рекурсивно вызвали себя же, чтоб создать соединение снова
     с определенным интервалом */
     setTimeout(() => {
@@ -50,6 +52,11 @@ const messageEventHandler = (e: MessageEvent) => {
     subscribers['message-received'].forEach(el => el(newMessages))
 }
 
+// Функция для обработчика события 'open'
+const openEventHandler = () => {
+    notifySubscribesAboutStatus('ready')
+}
+
 // Функция зачистки / отписки от событий
 const cleanUp = () => {
     // Отписались от старого события перед новой подпиской
@@ -57,6 +64,12 @@ const cleanUp = () => {
     // Отписка от события 'message'
     ws?.removeEventListener('message', messageEventHandler)
 }
+
+// Уведомляем подписчиков 'status-changed' об изменении статуса
+const notifySubscribesAboutStatus = (status: ChatStatusType) => {
+    subscribers['status-changed'].forEach(el => el(status))
+}
+
 
 // ------ Функция для добавления WebSocket соединения ------
 function createChannel() {
@@ -67,10 +80,15 @@ function createChannel() {
 
     // Инициализация нового WebSocket соединения
     ws = new WebSocket('wss://social-network.samuraijs.com/handlers/ChatHandler.ashx')
+    // Уведомляем подписчиков 'status-changed' об изменении статуса
+    notifySubscribesAboutStatus('pending')
+
     // Подписка на событие потери соединения
     ws.addEventListener('close', closeEvent)
     // Подписка на событие 'message'
     ws.addEventListener('message', messageEventHandler)
+    // Подписка на событие 'open'
+    ws.addEventListener('open', openEventHandler)
 }
 
 
