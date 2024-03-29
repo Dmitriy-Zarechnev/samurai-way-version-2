@@ -57,12 +57,22 @@ const openEventHandler = () => {
     notifySubscribesAboutStatus('ready')
 }
 
+// Функция для обработчика события 'error'
+const errorEventHandler = () => {
+    notifySubscribesAboutStatus('error')
+    console.error('REFRESH PAGE')
+}
+
 // Функция зачистки / отписки от событий
 const cleanUp = () => {
     // Отписались от старого события перед новой подпиской
     ws?.removeEventListener('close', closeEvent)
     // Отписка от события 'message'
     ws?.removeEventListener('message', messageEventHandler)
+    // Отписка от события 'open'
+    ws?.removeEventListener('open', openEventHandler)
+    // Отписка от события 'error'
+    ws?.removeEventListener('error', errorEventHandler)
 }
 
 // Уведомляем подписчиков 'status-changed' об изменении статуса
@@ -89,6 +99,8 @@ function createChannel() {
     ws.addEventListener('message', messageEventHandler)
     // Подписка на событие 'open'
     ws.addEventListener('open', openEventHandler)
+    // Подписка на событие 'error'
+    ws.addEventListener('error', errorEventHandler)
 }
 
 
@@ -100,10 +112,10 @@ export const chatAPI = {
         // @ts-ignore
         subscribers[eventName].push(callback)
         // Отписка в стиле Redux
-        return () => {
-            // @ts-ignore
-            subscribers[eventName] = subscribers[eventName].filter(el => el !== callback)
-        }
+        // return () => {
+        //     // @ts-ignore
+        //     subscribers[eventName] = subscribers[eventName].filter(el => el !== callback)
+        // }
     },
 
     // Отписка от сообщений в стиле pussy

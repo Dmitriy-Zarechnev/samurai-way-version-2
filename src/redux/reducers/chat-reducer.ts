@@ -12,7 +12,7 @@ export type ChatReducerActionsType =
 type ChatPageInitialState = typeof chatInitialState
 
 // Типизация Status
-export type ChatStatusType = 'pending' | 'ready'
+export type ChatStatusType = 'pending' | 'ready' | 'error'
 
 // *********** Константы названий actions ****************
 const CHAT_MESSAGES_RECEIVED = '/chat/CHAT-MESSAGES-RECEIVED'

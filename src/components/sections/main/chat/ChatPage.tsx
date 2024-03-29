@@ -1,4 +1,4 @@
-import React, {ChangeEvent, memo, useEffect, useState} from 'react'
+import React, {ChangeEvent, memo, UIEvent, useEffect, useRef, useState} from 'react'
 import {ChatMessageType} from '../../../../api/chat-api'
 import {useDispatch, useSelector} from 'react-redux'
 import {sendChatMessage, startChatMessagesListening, stopChatMessagesListening} from '../../../../redux/reducers/chat-reducer'
@@ -17,6 +17,9 @@ export const ChatPage = () => {
 export const Chat = () => {
     // Локальный state для WebSocket соединения
     // const [wsChannel, setWsChannel] = useState<WebSocket | null>(null)
+
+    // Используем хук useSelector и получаем данные из state
+    const status = useSelector(chatStatusSelector)
 
     //  Используем хук useDispatch и получаем dispatch
     const dispatch = useDispatch()
@@ -76,6 +79,7 @@ export const Chat = () => {
 
     return (
         <div>
+            {status === 'error' && <div>Some Error Occured! Please Refresh Page</div>}
             <ChatMessages/>
             <ChatAddMessageForm/>
         </div>
@@ -89,6 +93,19 @@ export const ChatMessages = () => {
 
     // Используем хук useSelector и получаем данные из state
     const messages = useSelector(chatMessagesSelector)
+    // Обратились напрямую к div элементу, чтоб сделать scroll
+    const messagesAnchorRef = useRef<HTMLDivElement>(null)
+    // Локальный state для управления AutoScroll
+    const [isAutoScroll, setIsAutoScroll] = useState(true)
+
+    useEffect(() => {
+        if (isAutoScroll) {
+            // Scroll будет внизу всегда
+            messagesAnchorRef.current?.scrollIntoView()
+        }
+    }, [messages])
+
+
     /*
         useEffect(() => {
             // Функция для обработчика события
@@ -104,14 +121,27 @@ export const ChatMessages = () => {
                 props.wsChannel?.removeEventListener('message', messageEvent)
             }
         }, [props.wsChannel])
-
      */
 
+    // ------ Функция для обработки scroll -------
+    const scrollHandler = (e: UIEvent<HTMLDivElement>) => {
+        let element = e.currentTarget
+        // Скролим нашу страницу
+        if (element.scrollHeight - element.scrollTop === element.clientHeight) {
+            // Дошли до конца и включили autoScroll
+            !isAutoScroll && setIsAutoScroll(true)
+        } else {
+            // Отошли и отключили autoScroll
+            isAutoScroll && setIsAutoScroll(false)
+        }
+    }
+
     return (
-        <div style={{height: '800px', overflowY: 'auto'}}>
+        <div style={{height: '800px', overflowY: 'auto'}} onScroll={scrollHandler}>
             {messages.map((el, index) => {
                 return <ChatMessage key={index} message={el}/>
             })}
+            <div ref={messagesAnchorRef}></div>
         </div>
     )
 }
@@ -136,7 +166,7 @@ export const ChatMessage = memo((props: { message: ChatMessageType }) => {
 
 export const ChatAddMessageForm = () => {
     // Локальный state для отправки своих сообщений
-    const [message, setMessage] = useState<string>('')
+    const [message, setMessage] = useState('')
     // Локальный state для статуса websocket канала
     // const [readyStatus, setReadyStatus] = useState<'pending' | 'ready'>('pending')
 
