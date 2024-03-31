@@ -37,8 +37,7 @@ export const ProfileStatusWithHooks = React.memo((props: ProfileStatusWithHooksP
             {editMode
                 ? <input onChange={onStatusChange} value={newStatus} onBlur={deactivateEditMode} autoFocus/>
                 : <span className={S.outer_span}
-                        onDoubleClick={activateEditMode}
-                >
+                        onDoubleClick={activateEditMode}>
                     Status: <span className={S.inner_span}>
                     {props.status || 'No status'}
                 </span>
