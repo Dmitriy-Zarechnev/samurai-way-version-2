@@ -12,7 +12,7 @@ import {LogInPage} from './logIn/LogInPage'
 import {ChatPage} from './chat/ChatPage'
 
 
-export const Main = React.memo(() => {
+export const Main = () => {
     return (
         <div className={S.app_main}>
             {/* Стартовая страница при пустом url*/}
@@ -41,6 +41,6 @@ export const Main = React.memo(() => {
             {/*<Route path="/*" render={() => <Error/>}/>*/}
         </div>
     )
-})
+}
 
 

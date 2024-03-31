@@ -35,14 +35,12 @@ let subscribers: SubscribersType = {
 let ws: WebSocket | null = null
 
 // Функция для обработчика события
-const closeEvent = () => {
+const closeEventHandler = () => {
     // Уведомляем подписчиков 'status-changed' об изменении статуса
     notifySubscribesAboutStatus('pending')
     /* Рекурсивно вызвали себя же, чтоб создать соединение снова
     с определенным интервалом */
-    setTimeout(() => {
-        createChannel()
-    }, 3000)
+    setTimeout(createChannel, 3000)
 }
 
 // Функция для обработчика события 'message'
@@ -67,7 +65,7 @@ const errorEventHandler = () => {
 // Функция зачистки / отписки от событий
 const cleanUp = () => {
     // Отписались от старого события перед новой подпиской
-    ws?.removeEventListener('close', closeEvent)
+    ws?.removeEventListener('close', closeEventHandler)
     // Отписка от события 'message'
     ws?.removeEventListener('message', messageEventHandler)
     // Отписка от события 'open'
@@ -95,7 +93,7 @@ function createChannel() {
     notifySubscribesAboutStatus('pending')
 
     // Подписка на событие потери соединения
-    ws.addEventListener('close', closeEvent)
+    ws.addEventListener('close', closeEventHandler)
     // Подписка на событие 'message'
     ws.addEventListener('message', messageEventHandler)
     // Подписка на событие 'open'
@@ -113,10 +111,10 @@ export const chatAPI = {
         // @ts-ignore
         subscribers[eventName].push(callback)
         // Отписка в стиле Redux
-        // return () => {
-        //     // @ts-ignore
-        //     subscribers[eventName] = subscribers[eventName].filter(el => el !== callback)
-        // }
+        return () => {
+            // @ts-ignore
+            subscribers[eventName] = subscribers[eventName].filter(el => el !== callback)
+        }
     },
 
     // Отписка от сообщений в стиле pussy

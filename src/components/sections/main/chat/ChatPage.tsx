@@ -1,8 +1,9 @@
 import React, {ChangeEvent, memo, UIEvent, useEffect, useRef, useState} from 'react'
 import {ChatMessageAPIType} from '../../../../api/chat-api'
-import {useDispatch, useSelector} from 'react-redux'
+import {useSelector} from 'react-redux'
 import {sendChatMessage, startChatMessagesListening, stopChatMessagesListening} from '../../../../redux/reducers/chat-reducer'
 import {chatMessagesSelector, chatStatusSelector} from '../../../../redux/selectors/chat-selector'
+import { useAppDispatch} from '../../../../redux/types/Types'
 
 
 export const ChatPage = () => {
@@ -19,8 +20,8 @@ export const Chat = () => {
     // Используем хук useSelector и получаем данные из state
     const status = useSelector(chatStatusSelector)
 
-    //  Используем хук useDispatch и получаем dispatch
-    const dispatch = useDispatch()
+    //  Используем хук useAppDispatch и получаем dispatch
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         // Начало открытия канала после монтирования компоненты
@@ -85,7 +86,6 @@ export const ChatMessages = () => {
 }
 
 
-
 export const ChatMessage = memo((props: { message: ChatMessageAPIType }) => {
 
     return (
@@ -105,7 +105,6 @@ export const ChatMessage = memo((props: { message: ChatMessageAPIType }) => {
 })
 
 
-
 export const ChatAddMessageForm = () => {
     // Локальный state для отправки своих сообщений
     const [message, setMessage] = useState('')
@@ -113,8 +112,8 @@ export const ChatAddMessageForm = () => {
     // Используем хук useSelector и получаем данные из state
     const status = useSelector(chatStatusSelector)
 
-    //  Используем хук useDispatch и получаем dispatch
-    const dispatch = useDispatch()
+    //  Используем хук useAppDispatch и получаем dispatch
+    const dispatch = useAppDispatch()
 
 
     // ------ Функция для отправки сообщения -------
