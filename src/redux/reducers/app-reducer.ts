@@ -8,17 +8,17 @@ export type AppReducerActionsType =
 // Типизация AppInitialState
 export type AppInitialState = typeof initialState
 
-// *********** Константы названий экшенов ****************
+// *********** Константы названий actions ****************
 const INITIALIZED_SUCCESS = '/app/INITIALIZED-SUCCESS'
 
 
-// *********** Первоначальный стэйт для appReducer ****************
+// *********** Первоначальный state для appReducer ****************
 const initialState = {
     initialized: false
 }
 
 
-// *********** Reducer - редьюсер, чистая функция для изменения стэйта после получения экшена от диспача ****************
+// *********** Reducer - чистая функция для изменения state после получения action от dispatch ****************
 export const appReducer = (state = initialState, action: AppReducerActionsType): AppInitialState => {
     switch (action.type) {
         case INITIALIZED_SUCCESS:
@@ -30,16 +30,16 @@ export const appReducer = (state = initialState, action: AppReducerActionsType):
 }
 
 
-// *********** Action creators - экшн криэйторы создают объект action ****************
+// *********** Action creators - создают объект action ****************
 export const initializedSuccess = () => {
     return {type: INITIALIZED_SUCCESS} as const
 }
 
 
-// *********** Thunk - санки необходимые для общения с DAL ****************
+// *********** Thunk - необходимые для общения с DAL ****************
 //  -------- Инициализация на сайте ----------------
 export const initializeApp = () => (dispatch: ThunkDispatchType) => {
-    // Диспатчим thunk, которая совершит инициализацию
+    // Dispatch thunk, которая совершит инициализацию
     const promise = dispatch(authMe())
 
     // После завершения инициализации, меняем значение в state

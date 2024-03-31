@@ -2,14 +2,14 @@ import {authAPI,  securityAPI} from '../../api/api'
 import {ResultCodesEnum, ResultCodesForCaptcha, ThunkDispatchType, ThunkType} from '../types/Types'
 
 
-// Типизация
+// Типизация actions
 export type AuthReducerActionsType =
     ReturnType<typeof setAuthUserData> |
     ReturnType<typeof logInServer> |
     ReturnType<typeof serverError> |
     ReturnType<typeof getCaptchaUrlSuccess>
 
-
+// Типизация AuthPageInitialState
 export type AuthPageInitialState = {
     id: number | null
     email: string
@@ -28,14 +28,14 @@ export type LogInType = {
 }
 
 
-// *********** Константы названий экшенов ****************
+// *********** Константы названий actions ****************
 const SET_AUTH_USER_DATA = '/auth/SET-AUTH-USER-DATA'
 const LOG_IN_SERVER = '/auth/LOG-IN-SERVER'
 const SERVER_ERROR = '/auth/SERVER-ERROR'
 const GET_CAPTCHA_URL_SUCCESS = '/auth/GET-CAPTCHA-URL-SUCCESS'
 
 
-// *********** Первоначальный стэйт для authReducer ****************
+// *********** Первоначальный state для authReducer ****************
 const initialState: AuthPageInitialState = {
     id: null,
     email: '',
@@ -52,7 +52,7 @@ const initialState: AuthPageInitialState = {
 }
 
 
-// *********** Reducer - редьюсер, чистая функция для изменения стэйта после получения экшена от диспача ****************
+// *********** Reducer - чистая функция для изменения state после получения action от dispatch ****************
 export const authReducer = (state = initialState, action: AuthReducerActionsType): AuthPageInitialState => {
     switch (action.type) {
         case SET_AUTH_USER_DATA:
@@ -91,7 +91,7 @@ export const authReducer = (state = initialState, action: AuthReducerActionsType
 }
 
 
-// *********** Action creators - экшн криэйторы создают объект action ****************
+// *********** Action creators - создают объект action ****************
 export const setAuthUserData = (id: number | null, email: string, login: string, isAuth: boolean) => {
     return {type: SET_AUTH_USER_DATA, payload: {id, email, login, isAuth}} as const
 }
@@ -105,7 +105,7 @@ export const getCaptchaUrlSuccess = (url: string) => {
     return {type: GET_CAPTCHA_URL_SUCCESS, payload: {url}} as const
 }
 
-// *********** Thunk - санки необходимые для общения с DAL ****************
+// *********** Thunk - необходимые для общения с DAL ****************
 //  -------- Проверка авторизации на сервере ----------------
 export const authMe = (): ThunkType => async (dispatch: ThunkDispatchType) => {
     // Запрос на авторизацию

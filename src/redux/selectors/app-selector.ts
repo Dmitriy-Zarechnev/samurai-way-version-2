@@ -1,5 +1,5 @@
 import {AppRootState} from '../redux-store'
 
-export const getInitialized = (state: AppRootState) => {
+export const getInitialized = (state: AppRootState):boolean => {
     return state.app.initialized
 }

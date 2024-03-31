@@ -9,8 +9,8 @@ export type ChatReducerActionsType =
     ReturnType<typeof chatStatusChanged>
 
 
-// Типизация InitialState
-type ChatPageInitialState = typeof chatInitialState
+// Типизация ChatPageInitialState
+export type ChatPageInitialState = typeof chatInitialState
 
 // Типизация Status
 export type ChatStatusType = 'pending' | 'ready' | 'error'
