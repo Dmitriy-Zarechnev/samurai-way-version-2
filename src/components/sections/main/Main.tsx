@@ -36,6 +36,7 @@ export const Main = React.memo(() => {
 
             <Route path="/login" render={() => <LogInPage/>}/>
 
+
             {/* Страница с ошибкой */}
             {/*<Route path="/*" render={() => <Error/>}/>*/}
         </div>

@@ -4,7 +4,6 @@ import {MyPostsContainer} from './myPosts/MyPostsContainer'
 import {FriendsSideBarContainer} from './friendsSideBar/FriendsSideBarContainer'
 import {ProfileInfoContainer} from './profileInfo/ProfileInfoContainer'
 
-
 export const Profile = () => {
     return (
         <section className={S.app_profile}>
