@@ -1,10 +1,11 @@
 import img2 from '../../assets/images/NewPostDefault.jpg'
 import img1 from '../../assets/images/PostDefault.jpg'
 import {profileAPI} from '../../api/api'
-import {ResultCodesEnum, ThunkDispatchType, ThunkType} from '../types/Types'
+import {ResultCodesEnum, ThunkDispatchType} from '../types/Types'
+import {AppRootState} from '../redux-store'
 
 
-// Типизация
+// Типизация profileReducerInitialState
 export type ProfilePagePropsType = {
     profileInfo: ProfileInfoType
     postsData: PostsDataType[]
@@ -45,7 +46,7 @@ export type PostsDataType = {
     message: string
     likesCount: number
 }
-
+// Типизация actions
 export type MyPostsActionsType =
     ReturnType<typeof addPost> |
     ReturnType<typeof setUserProfile> |
@@ -56,7 +57,7 @@ export type MyPostsActionsType =
     ReturnType<typeof failUpdate>
 
 
-// *********** Константы названий экшенов ****************
+// *********** Константы названий actions ****************
 const ADD_POST = '/profile/ADD-POST'
 const SET_USER_PROFILE = '/profile/SET-USER-PROFILE'
 const GET_USER_STATUS = '/profile/GET-USER-STATUS'
@@ -66,7 +67,7 @@ const UPDATE_YOUR_PHOTO = '/profile/UPDATE-YOUR-PHOTO'
 const FAIL_UPDATE = '/profile/FAIL-UPDATE'
 
 
-// *********** Первоначальный стэйт для profileReducer ****************
+// *********** Первоначальный state для profileReducer ****************
 const initialState: ProfilePagePropsType = {
     profileInfo: {
         aboutMe: '',
@@ -105,9 +106,8 @@ const initialState: ProfilePagePropsType = {
 }
 
 
-// *********** Reducer - редьюсер, чистая функция для изменения стэйта после получения экшена от диспача ****************
+// *********** Reducer - чистая функция для изменения state после получения action от dispatch ****************
 export const profileReducer = (state = initialState, action: MyPostsActionsType): ProfilePagePropsType => {
-
     switch (action.type) {
 
         case ADD_POST:
@@ -165,7 +165,7 @@ export const profileReducer = (state = initialState, action: MyPostsActionsType)
 }
 
 
-// *********** Action creators - экшн криэйторы создают объект action ****************
+// *********** Action creators - создают объект action ****************
 export const addPost = (header: string, post: string) => {
     return {type: ADD_POST, payload: {header, post}} as const
 }
@@ -189,7 +189,7 @@ export const failUpdate = (failMessage: string) => {
 }
 
 
-// *********** Thunk - санки необходимые для общения с DAL ****************
+// *********** Thunk - необходимые для общения с DAL ****************
 //  -------- Загрузка страницы пользователя ----------------
 export const goToPage = (id: number) => async (dispatch: ThunkDispatchType) => {
     // Запросили данные profile с сервера при пустом url
@@ -248,7 +248,8 @@ export const savePhoto = (file: File) => async (dispatch: ThunkDispatchType) => 
 
 
 //  -------- Загрузка исправленных данных пользователя ----------------
-export const saveProfile = (data: ProfileInfoType): ThunkType => async (dispatch: ThunkDispatchType, getState) => {
+export const saveProfile = (data: ProfileInfoType) => async (dispatch: ThunkDispatchType,
+                                                             getState: () => AppRootState) => {
     // Узнали свой id
     const userId = getState().auth.id
 

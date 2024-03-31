@@ -8,7 +8,7 @@ import {connect} from 'react-redux'
 import {initializeApp} from './redux/reducers/app-reducer'
 import {AppRootState} from './redux/redux-store'
 import {Preloader} from './components/common/preloader/Preloader'
-import {getInitialized} from './redux/selectors/app-selector'
+import {getInitializedS} from './redux/selectors/app-selector'
 
 
 // Типизация
@@ -58,7 +58,7 @@ class App extends React.PureComponent<AppPropsType> {
 
 const mapStateToProps = (state: AppRootState) => {
     return {
-        initialized: getInitialized(state)
+        initialized: getInitializedS(state)
     }
 }
 

@@ -21,7 +21,7 @@ const initialState = {
 }
 
 // *********** Reducer - редьюсер, чистая функция для изменения стэйта после получения экшена от диспача ****************
-export const messagesReducer = (state = initialState, action: MyMessagesActionsType): MessagesPagePropsType => {
+export const messagesReducer = (state: MessagesPagePropsType = initialState, action: MyMessagesActionsType): MessagesPagePropsType => {
 
     switch (action.type) {
         case SEND_NEW_MESSAGE:

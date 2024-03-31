@@ -1,26 +1,26 @@
 import {AppRootState} from '../redux-store'
+import {PostsDataType, ProfileInfoType} from '../reducers/profile-reducer'
 
-export const getProfileInfo = (state: AppRootState) => {
+export const getProfileInfoS = (state: AppRootState): ProfileInfoType => {
     return state.profilePage.profileInfo
 }
 
-export const getStatusFromState = (state: AppRootState) => {
+export const getStatusFromStateS = (state: AppRootState): string => {
     return state.profilePage.status
 }
 
-export const getId = (state: AppRootState) => {
+export const getIdS = (state: AppRootState): number | null => {
     return state.auth.id
 }
 
-export const getIsAuth = (state: AppRootState) => {
+export const getIsAuthS = (state: AppRootState): boolean => {
     return state.auth.isAuth
 }
 
-
-export const getPostsDataFromState = (state: AppRootState) => {
+export const getPostsDataFromStateS = (state: AppRootState): PostsDataType[] => {
     return state.profilePage.postsData
 }
 
-export const getFailMessage = (state: AppRootState) => {
+export const getFailMessageS = (state: AppRootState): string => {
     return state.profilePage.failMessage
 }

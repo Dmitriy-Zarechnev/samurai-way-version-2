@@ -5,7 +5,7 @@ import {sendNewMessage} from '../../../../../redux/reducers/messages-reducer'
 import {AppRootState} from '../../../../../redux/redux-store'
 import {withAuthRedirect} from '../../../../../hoc/withAuthRedirect'
 import {compose} from 'redux'
-import {getMessageData} from '../../../../../redux/selectors/message-selector'
+import {getMessageData} from '../../../../../redux/selectors/messages-selector'
 
 
 export type MyMessagesPropsType =

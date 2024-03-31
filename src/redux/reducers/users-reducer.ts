@@ -3,7 +3,7 @@ import {updateObjectInArray} from '../../utils/object-helpers'
 import {ResultCodesEnum, ThunkDispatchType, ThunkType} from '../types/Types'
 
 
-// Типизация
+// Типизация UsersInitialState
 export type UsersInitialState = {
     items: UsersListType[]
     totalCount: number
@@ -34,6 +34,7 @@ export type UsersFilterType = {
     friends: null | boolean
 }
 
+// Типизация actions
 export type UsersAPIComponentActionsType =
     ReturnType<typeof followFriend> |
     ReturnType<typeof unfollowFriend> |
@@ -45,7 +46,7 @@ export type UsersAPIComponentActionsType =
     ReturnType<typeof setFilter>
 
 
-// *********** Константы названий экшенов ****************
+// *********** Константы названий actions ****************
 const FOLLOW_FRIEND = '/users/FOLLOW-FRIEND'
 const UNFOLLOW_FRIEND = '/users/UNFOLLOW-FRIEND'
 const SET_USERS = '/users/SET-USERS'
@@ -56,7 +57,7 @@ const TOGGLE_IS_FOLLOWING_IN_PROGRESS = '/users/TOGGLE-IS-FOLLOWING-IN-PROGRESS'
 const SET_FILTER = '/users/SET-FILTER'
 
 
-// *********** Первоначальный стэйт для usersReducer ****************
+// *********** Первоначальный state для usersReducer ****************
 const initialState: UsersInitialState = {
     items: [],
     totalCount: 0,
@@ -72,7 +73,7 @@ const initialState: UsersInitialState = {
 }
 
 
-// *********** Reducer - редьюсер, чистая функция для изменения стэйта после получения экшена от диспача ****************
+// *********** Reducer - чистая функция для изменения state после получения action от dispatch ****************
 export const usersReducer = (state = initialState, action: UsersAPIComponentActionsType): UsersInitialState => {
 
     switch (action.type) {
@@ -123,7 +124,7 @@ export const usersReducer = (state = initialState, action: UsersAPIComponentActi
 }
 
 
-// ****** Action creators - экшн криэйторы создают объект action ***********
+// ****** Action creators - создают объект action ***********
 export const followFriend = (userID: number) => {
     return {type: FOLLOW_FRIEND, payload: {userID}} as const
 }
@@ -150,7 +151,7 @@ export const setFilter = (filter: UsersFilterType) => {
 }
 
 
-// *********** Thunk - санки необходимые для общения с DAL ****************
+// *********** Thunk - необходимые для общения с DAL ****************
 //  -------- Первая загрузка списка пользователей ----------------
 export const getUsers = (currentPage: number, pageSize: number, filter: UsersFilterType): ThunkType => {
     return async (dispatch: ThunkDispatchType) => {

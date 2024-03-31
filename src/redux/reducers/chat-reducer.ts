@@ -40,8 +40,7 @@ export const chatReducer = (state: ChatPageInitialState = chatInitialState, acti
                     ...state.messages,
                     ...action.payload.messages
                         .map(el => ({...el, id: v1()}))
-                ]
-                    .filter((_, i, arr) => i >= arr.length - 100)
+                ].filter((_, i, arr) => i >= arr.length - 100)
             }
 
         case CHAT_STATUS_CHANGED:
@@ -62,7 +61,6 @@ export const chatMessagesReceived = (messages: ChatMessageAPIType[]) => {
 export const chatStatusChanged = (status: ChatStatusType) => {
     return {type: CHAT_STATUS_CHANGED, payload: {status}} as const
 }
-
 
 
 // Создали универсальную приватную функцию для messages

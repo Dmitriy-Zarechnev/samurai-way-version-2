@@ -7,7 +7,7 @@ import {Button} from '../../../common/button/Button'
 import {Redirect} from 'react-router-dom'
 import {CheckInputForm} from '../../../common/checkInputForm/CheckInputForm'
 import {useDispatch, useSelector} from 'react-redux'
-import {getCaptchaUrlFromState, getIsAuth, getIsServerError, getLogInObj} from '../../../../redux/selectors/auth-selector'
+import {getCaptchaUrlFromStateS, getIsAuthS, getIsServerErrorS, getLogInObjS} from '../../../../redux/selectors/auth-selector'
 
 
 export type Inputs = {
@@ -27,10 +27,10 @@ export const LogInPage = () => {
     } = useForm<Inputs>()
 
     // Используем хук useSelector и получаем данные из state
-    const logIn = useSelector(getLogInObj)
-    const isAuth = useSelector(getIsAuth)
-    const isServerError = useSelector(getIsServerError)
-    const captchaUrl = useSelector(getCaptchaUrlFromState)
+    const logIn = useSelector(getLogInObjS)
+    const isAuth = useSelector(getIsAuthS)
+    const isServerError = useSelector(getIsServerErrorS)
+    const captchaUrl = useSelector(getCaptchaUrlFromStateS)
 
     //  Используем хук useDispatch и получаем dispatch
     const dispatch = useDispatch()

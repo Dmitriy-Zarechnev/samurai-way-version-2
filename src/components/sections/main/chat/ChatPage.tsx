@@ -2,7 +2,7 @@ import React, {ChangeEvent, memo, UIEvent, useEffect, useRef, useState} from 're
 import {ChatMessageAPIType} from '../../../../api/chat-api'
 import {useSelector} from 'react-redux'
 import {sendChatMessage, startChatMessagesListening, stopChatMessagesListening} from '../../../../redux/reducers/chat-reducer'
-import {chatMessagesSelector, chatStatusSelector} from '../../../../redux/selectors/chat-selector'
+import {chatMessagesS, chatStatusS} from '../../../../redux/selectors/chat-selector'
 import { useAppDispatch} from '../../../../redux/types/Types'
 
 
@@ -18,7 +18,7 @@ export const ChatPage = () => {
 export const Chat = () => {
 
     // Используем хук useSelector и получаем данные из state
-    const status = useSelector(chatStatusSelector)
+    const status = useSelector(chatStatusS)
 
     //  Используем хук useAppDispatch и получаем dispatch
     const dispatch = useAppDispatch()
@@ -46,7 +46,7 @@ export const Chat = () => {
 export const ChatMessages = () => {
 
     // Используем хук useSelector и получаем данные из state
-    const messages = useSelector(chatMessagesSelector)
+    const messages = useSelector(chatMessagesS)
 
     // Обратились напрямую к div элементу, чтоб сделать scroll
     const messagesAnchorRef = useRef<HTMLDivElement>(null)
@@ -110,7 +110,7 @@ export const ChatAddMessageForm = () => {
     const [message, setMessage] = useState('')
 
     // Используем хук useSelector и получаем данные из state
-    const status = useSelector(chatStatusSelector)
+    const status = useSelector(chatStatusS)
 
     //  Используем хук useAppDispatch и получаем dispatch
     const dispatch = useAppDispatch()

@@ -2,12 +2,12 @@ import React from 'react'
 import {AppRootState} from '../redux/redux-store'
 import {connect} from 'react-redux'
 import {Redirect} from 'react-router-dom'
-import {getIsAuth} from '../redux/selectors/auth-selector'
+import {getIsAuthS} from '../redux/selectors/auth-selector'
 
 
 const mapStateToPropsForRedirect = (state: AppRootState) => {
     return {
-        isAuth: getIsAuth(state)
+        isAuth: getIsAuthS(state)
     }
 }
 type mapStateToPropsForRedirectPropsType = ReturnType<typeof mapStateToPropsForRedirect>

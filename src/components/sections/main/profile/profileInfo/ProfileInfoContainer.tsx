@@ -5,7 +5,7 @@ import React from 'react'
 import {RouteComponentProps, withRouter} from 'react-router-dom'
 import {AppRootState} from '../../../../../redux/redux-store'
 import {compose} from 'redux'
-import {getFailMessage, getId, getIsAuth, getProfileInfo, getStatusFromState} from '../../../../../redux/selectors/profile-selector'
+import {getFailMessageS, getIdS, getIsAuthS, getProfileInfoS, getStatusFromStateS} from '../../../../../redux/selectors/profile-selector'
 
 type ProfileInfoAPIComponentPropsType =
     ProfileInfoAPIComponentMapStateToProps &
@@ -73,11 +73,11 @@ class ProfileInfoAPIComponent extends React.PureComponent<ProfileInfoAPIComponen
 
 const mapStateToProps = (state: AppRootState) => {
     return {
-        profileInfo: getProfileInfo(state),
-        status: getStatusFromState(state),
-        userId: getId(state),
-        isAuth: getIsAuth(state),
-        failMessage: getFailMessage(state)
+        profileInfo: getProfileInfoS(state),
+        status: getStatusFromStateS(state),
+        userId: getIdS(state),
+        isAuth: getIsAuthS(state),
+        failMessage: getFailMessageS(state)
     }
 }
 
