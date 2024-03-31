@@ -111,10 +111,10 @@ export const chatAPI = {
         // @ts-ignore
         subscribers[eventName].push(callback)
         // Отписка в стиле Redux
-        return () => {
-            // @ts-ignore
-            subscribers[eventName] = subscribers[eventName].filter(el => el !== callback)
-        }
+        // return () => {
+        //     // @ts-ignore
+        //     subscribers[eventName] = subscribers[eventName].filter(el => el !== callback)
+        // }
     },
 
     // Отписка от сообщений в стиле pussy
