@@ -1,7 +1,7 @@
 import {authMe} from './auth-reducer'
 import {ThunkDispatchType} from '../types/Types'
 
-// Типизация Actions
+// Типизация actions
 export type AppReducerActionsType =
     ReturnType<typeof initializedSuccess>
 
