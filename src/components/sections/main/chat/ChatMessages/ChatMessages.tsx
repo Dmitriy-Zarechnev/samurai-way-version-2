@@ -2,6 +2,7 @@ import {useSelector} from 'react-redux'
 import {chatMessagesS} from '../../../../../redux/selectors/chat-selector'
 import React, {UIEvent, useEffect, useRef, useState} from 'react'
 import {ChatMessage} from './chatMessage/ChatMessage'
+import S from './ChatMessages.module.css'
 
 
 export const ChatMessages = () => {
@@ -36,7 +37,7 @@ export const ChatMessages = () => {
     }
 
     return (
-        <div style={{height: '700px', overflowY: 'auto'}} onScroll={scrollHandler}>
+        <div className={S.messages_wrapper} onScroll={scrollHandler}>
             {messages.map(el => {
                 return <ChatMessage key={el.id} message={el}/>
             })}

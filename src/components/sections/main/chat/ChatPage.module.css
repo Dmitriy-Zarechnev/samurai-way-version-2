@@ -1,0 +1,12 @@
+@import "../../../../ColorVar.module.css";
+
+.wrapper {
+    padding: 10px 0 10px 8px;
+    height: 100%;
+}
+
+.error {
+    color: var(--error-main);
+    font-size: 30px;
+    font-weight: 600;
+}

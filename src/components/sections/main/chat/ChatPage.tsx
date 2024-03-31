@@ -5,6 +5,7 @@ import {chatStatusS} from '../../../../redux/selectors/chat-selector'
 import {useAppDispatch} from '../../../../redux/types/Types'
 import {ChatMessages} from './ChatMessages/ChatMessages'
 import {ChatAddMessageForm} from './chatAddMessage/ChatAddMessageForm'
+import S from './ChatPage.module.css'
 
 
 export const ChatPage = () => {
@@ -25,8 +26,8 @@ export const ChatPage = () => {
     }, [])
 
     return (
-        <div>
-            {status === 'error' && <div>Some Error Occurred! Please Refresh Page</div>}
+        <div className={S.wrapper}>
+            {status === 'error' && <div className={S.error}>Some Error Occurred! Please Refresh Page</div>}
             <ChatMessages/>
             <ChatAddMessageForm/>
         </div>

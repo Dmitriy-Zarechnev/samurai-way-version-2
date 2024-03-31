@@ -4,7 +4,7 @@ import {chatStatusS} from '../../../../../redux/selectors/chat-selector'
 import {useAppDispatch} from '../../../../../redux/types/Types'
 import {sendChatMessage} from '../../../../../redux/reducers/chat-reducer'
 import {SubmitHandler, useForm} from 'react-hook-form'
-import S from '../../messages/myMessages/newMessageArea/NewMessageArea.module.css'
+import S from './ChatAddMessageForm.module.css'
 import {TextAreaForm} from '../../../../common/textareaForm/TextAreaForm'
 import {Button} from '../../../../common/button/Button'
 
@@ -23,6 +23,7 @@ export const ChatAddMessageForm = () => {
         formState: {errors}
     } = useForm<{ message: string }>()
 
+    // Отправка message в state
     const onSubmit: SubmitHandler<{ message: string }> = (data) => {
         dispatch(sendChatMessage(data.message)).then(() => reset())
     }

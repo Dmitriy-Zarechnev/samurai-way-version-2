@@ -1,20 +1,19 @@
 import React, {memo} from 'react'
 import {ChatMessageAPIType} from '../../../../../../api/chat-api'
+import S from './ChatMessage.module.css'
+import imgAlt from '../../../../../../assets/images/FriendDefault.webp'
 
 export const ChatMessage = memo((props: { message: ChatMessageAPIType }) => {
 
     return (
-        <div>
-            <div>
-                <img style={{width: '30px', height: '30px'}}
-                     src={props.message.photo}
-                     alt={'message'}/>
-                <div>
-                    <span>{props.message.userName}</span>
-                </div>
+        <div className={S.wrapper}>
+            <div className={S.item_box}>
+                <span className={S.item_text}>{props.message.userName}</span>
+                <img className={S.item__img}
+                     src={props.message.photo ? props.message.photo : imgAlt}
+                     alt={`${props.message.userName} - photo`}/>
             </div>
-            <p>{props.message.message}</p>
-            <hr/>
+            <p className={S.message}>{props.message.message}</p>
         </div>
     )
 })
