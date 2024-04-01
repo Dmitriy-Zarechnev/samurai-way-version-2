@@ -3,6 +3,7 @@ import {PhotosType, ProfileInfoType} from '../redux/reducers/profile-reducer'
 import {ResultCodesEnum, ResultCodesForCaptcha} from '../redux/types/Types'
 import {UsersListType} from '../redux/reducers/users-reducer'
 
+
 // Типизация response в users-запросах
 export type UserResponseType = {
     totalCount: number,
