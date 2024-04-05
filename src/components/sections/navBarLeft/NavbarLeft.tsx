@@ -2,6 +2,7 @@ import React from 'react'
 import S from './NavbarLeft.module.css'
 import {NavLink} from 'react-router-dom'
 
+
 export const NavbarLeft = React.memo(() => {
     return (
         <nav className={S.navbar_Left}>
