@@ -203,6 +203,7 @@ const followUnfollow = async (dispatch: ThunkDispatchType,
     dispatch(toggleFollowingInProgress(false, id))
 }
 
+
 //  -------- Отписка от дружбы ----------------
 export const unFollow = (id: number): ThunkType => {
     return async (dispatch: ThunkDispatchType) => {
