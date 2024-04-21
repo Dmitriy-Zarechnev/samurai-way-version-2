@@ -9,6 +9,7 @@ export type AuthReducerActionsType =
     ReturnType<typeof serverError> |
     ReturnType<typeof getCaptchaUrlSuccess>
 
+
 // Типизация AuthPageInitialState
 export type AuthPageInitialState = {
     id: number | null
@@ -20,6 +21,7 @@ export type AuthPageInitialState = {
     isServerError: string
     captchaUrl: string
 }
+
 
 export type LogInType = {
     email: string,
